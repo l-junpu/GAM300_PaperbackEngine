@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\dependencies\xcore\src\xcore.cpp" />
+    <ClCompile Include="..\..\dependencies\xcore\src\xcore_profiler_1.cpp" />
+    <ClCompile Include="..\..\dependencies\xcore\src\xcore_profiler_2.cpp" />
+    <ClCompile Include="..\..\src\main.cpp" />
+    <ClCompile Include="..\..\src\Paperback_Clock.cpp" />
+    <ClCompile Include="..\..\src\PCH.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\dependencies\xcore\src\xcore.h" />
+    <ClInclude Include="..\..\src\BufferRefresh.h" />
+    <ClInclude Include="..\..\src\Bullet.h" />
+    <ClInclude Include="..\..\src\BulletLogicSystem.h" />
+    <ClInclude Include="..\..\src\BulletRenderingSystem.h" />
+    <ClInclude Include="..\..\src\Details\paperback_bitset_inline.h" />
+    <ClInclude Include="..\..\src\Details\paperback_component_inline.h" />
+    <ClInclude Include="..\..\src\Details\paperback_coordinator_inline.h" />
+    <ClInclude Include="..\..\src\Details\paperback_entity_inline.h" />
+    <ClInclude Include="..\..\src\Details\paperback_event_inline.h" />
+    <ClInclude Include="..\..\src\Details\paperback_gamemanager_inline.h" />
+    <ClInclude Include="..\..\src\Details\paperback_pool_inline.h" />
+    <ClInclude Include="..\..\src\Details\paperback_query_inline.h" />
+    <ClInclude Include="..\..\src\Details\paperback_system_inline.h" />
+    <ClInclude Include="..\..\src\Paperback.h" />
+    <ClInclude Include="..\..\src\paperback_bitset.h" />
+    <ClInclude Include="..\..\src\Paperback_Clock.h" />
+    <ClInclude Include="..\..\src\paperback_component.h" />
+    <ClInclude Include="..\..\src\paperback_coordinator.h" />
+    <ClInclude Include="..\..\src\paperback_entity.h" />
+    <ClInclude Include="..\..\src\paperback_event.h" />
+    <ClInclude Include="..\..\src\paperback_gamemanager.h" />
+    <ClInclude Include="..\..\src\paperback_pool.h" />
+    <ClInclude Include="..\..\src\paperback_query.h" />
+    <ClInclude Include="..\..\src\paperback_settings.h" />
+    <ClInclude Include="..\..\src\paperback_system.h" />
+    <ClInclude Include="..\..\src\PCH.h" />
+    <ClInclude Include="..\..\src\PhysicsSystem.h" />
+    <ClInclude Include="..\..\src\Rigidbody.h" />
+    <ClInclude Include="..\..\src\Settings\PropertyConfig.h" />
+    <ClInclude Include="..\..\src\Settings\xcore_user_settings.h" />
+    <ClInclude Include="..\..\src\ShipLogicSystem.h" />
+    <ClInclude Include="..\..\src\ShipRenderingSystem.h" />
+    <ClInclude Include="..\..\src\Timer.h" />
+    <ClInclude Include="..\..\src\Transform.h" />
+    <ClInclude Include="..\..\src\Vector.h" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>16.0</VCProjectVersion>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectGuid>{dff970d7-f444-4b6f-8e8b-41d4680fd616}</ProjectGuid>
+    <RootNamespace>ExampleProjectvs2019</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);../../src/Settings</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);../../src/Settings</IncludePath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;PAPERBACK_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <AdditionalIncludeDirectories>../../src</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>../../dependencies/xcore/dependencies/zstd/build/VS2010/bin/x64_Debug;../../dependencies/glut/x64/Debug;../../dependencies/xcore</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level4</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;PAPERBACK_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
+      <AdditionalIncludeDirectories>../../src</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>../../dependencies/glut/x64/Release;../../dependencies/xcore</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
