@@ -2,6 +2,11 @@
 
 namespace paperback::coordinator
 {
+	instance::instance( void ) noexcept
+	{
+		m_CompMgr.RegisterComponent<paperback::component::entity>();
+	}
+
 	instance& instance::GetInstance() noexcept
 	{
 		static instance Instance;
@@ -59,7 +64,14 @@ namespace paperback::coordinator
 	{
 		assert( Entity.IsZombie() == false );
 		auto& Info = GetEntityInfo( Entity );
+		assert( Info.m_Validation == Entity.m_Validation );
 		Info.m_pArchetype->DestroyEntity( Entity );
+	}
+
+	//TEMPORARY TEST ONLY
+	void instance::RemoveEntity(const uint32_t LastIndex, const vm::PoolDetails Details) noexcept
+	{
+		m_EntityMgr.RemoveEntity( LastIndex, Details );
 	}
 
 	template < typename... T_COMPONENTS >
@@ -136,8 +148,6 @@ namespace paperback::coordinator
 					}(xcore::types::null_tuple_v<func_traits::args_tuple>);
 				}
 			});
-
-			FreeEntitiesInArchetype(Archetype);
 		}
 	}
 
@@ -198,7 +208,6 @@ namespace paperback::coordinator
 				}
 			});
 
-			FreeEntitiesInArchetype( Archetype );
 			if (bBreak) break;
 		}
 	}
@@ -239,7 +248,7 @@ namespace paperback::coordinator
 			}
 		}
 
-		m_pArchetypeList.push_back(std::make_unique<archetype::instance>(Query));
+		m_pArchetypeList.push_back( std::make_unique<archetype::instance>( *this, Query ) );
 		m_ArchetypeBits.push_back(Query);
 
 		m_pArchetypeList.back()->Init(Types);

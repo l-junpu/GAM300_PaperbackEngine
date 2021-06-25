@@ -20,6 +20,8 @@ namespace paperback::coordinator
 
 	//public:
 
+		instance( void ) noexcept;
+
 		PPB_INLINE
 		static instance& GetInstance() noexcept;
 
@@ -43,6 +45,9 @@ namespace paperback::coordinator
 
 		PPB_INLINE
 		void DeleteEntity( component::entity& Entity ) noexcept;
+
+		PPB_INLINE // TEMPORARY TEST ONLY
+		void RemoveEntity(const uint32_t LastIndex, const vm::PoolDetails Details) noexcept;
 
 		template < typename... T_COMPONENTS >
         std::vector<archetype::instance*> Search() const noexcept;

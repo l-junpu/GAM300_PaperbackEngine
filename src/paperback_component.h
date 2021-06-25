@@ -40,7 +40,7 @@ namespace paperback::component
             uint32_t        m_UID;
             struct
             {
-                uint32_t    m_Generation : 31   // Generation of the Entity (Avoid Collisions)
+                uint32_t    m_Next : 31         // Index of next Entity within Entity Manager (For Deletion)
                 ,           m_bZombie    : 1;   // Entity Status
             };
 

@@ -36,18 +36,15 @@ struct ShipLogicSystem : paperback::system::instance
                 timer.m_Timer = 5;
 
                 m_Engine.m_Coordinator.CreateEntity([&]( paperback::component::entity& Bullet_Entity, Transform& xform, Rigidbody& rb, Timer& timer, Bullet& bullet)
-                    {
-                        ++Bullet_Entity.m_Validation.m_Generation;
-                        Bullet_Entity.m_Validation.m_bZombie = false;
+                {
+                    Direction /= std::sqrt(DistanceSq);
+                    xform.m_Position = transform.m_Position + rb.m_Velocity;
+                    rb.m_Velocity = Direction * 3.0f;
 
-                        Direction /= std::sqrt(DistanceSq);
-                        xform.m_Position = transform.m_Position + rb.m_Velocity;
-                        rb.m_Velocity = Direction * 3.0f;
+                    bullet.m_Owner = Entity;
+                    timer.m_Timer = 3.0f;
+                });
 
-                        bullet.m_Owner = Entity;
-                        timer.m_Timer = 3.0f;
-                    }
-                );
                 return true;
             }
             return false;

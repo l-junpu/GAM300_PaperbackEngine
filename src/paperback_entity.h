@@ -11,6 +11,7 @@ namespace paperback
             using ComponentPool = std::array<vm::instance, 2>;
             using DeleteList = std::vector<component::entity>;
 
+            coordinator::instance&        m_Coordinator;
             ComponentPool                 m_ComponentPool{   };                 // Component Pool
             DeleteList                    m_DeleteList{   };                    // List of entities to be deleted
             tools::bits                   m_ComponentBits{   };                 // Component Signature
@@ -19,20 +20,14 @@ namespace paperback
             uint32_t                      m_ProcessReference{ 0 };              // Set to 1 when Archetype is updating
 
             PPB_INLINE
-            instance(const tools::bits& ComponentBits) noexcept;
+            instance( coordinator::instance& Coordinator, const tools::bits& ComponentBits) noexcept;
 
             PPB_INLINE
             void Init(std::span<const component::info* const> Types) noexcept;
 
-            //template< typename T_CALLBACK >
-            //uint32_t CreateEntity(T_CALLBACK&& Function) noexcept;
-
             //NEW TEST
             template< typename T_CALLBACK >
-            PoolDetails CreateEntity( T_CALLBACK&& Function ) noexcept; // basically normal entity creation, returning pool index and pool allocation index
-
-            //PPB_INLINE // OLD
-            //uint32_t DeleteEntity(const uint32_t EntityID) noexcept;
+            PoolDetails CreateEntity( T_CALLBACK&& Function ) noexcept;
 
             PPB_INLINE // NEW
             uint32_t DeleteEntity( const PoolDetails Details ) noexcept;
@@ -54,6 +49,9 @@ namespace paperback
                       std::is_same_v<typename xcore::function::traits<T_FUNCTION>::return_type, void>&&
                       xcore::function::traits<T_FUNCTION>::arg_count_v == 0 )
             void AccessGuard( T_FUNCTION&& Function ) noexcept;
+
+            PPB_INLINE
+            void UpdateStructuralChanges() noexcept;
         };
     }
 
@@ -62,11 +60,9 @@ namespace paperback
     {
         struct info
         {
-            archetype::instance*      m_pArchetype = nullptr;
-            //int                       m_PoolIndex = -1;                        // Index within the Archetype (Local)
-            vm::PoolDetails           m_PoolDetails;
-            uint32_t                  m_Generation = 0;                        // Entity generation
-            //uint8_t                   m_PoolCount = 0;                         // Pool 0 / 1
+            archetype::instance*            m_pArchetype = nullptr;
+            vm::PoolDetails                 m_PoolDetails;
+            component::entity::Validation   m_Validation;
         };
 
         struct manager
@@ -81,7 +77,7 @@ namespace paperback
             //void RegisterEntity( const u32 entity_id, archetype::instance* archetype ) noexcept;
 
             PPB_INLINE // NEW
-            void RegisterEntity( const PoolDetails Details, archetype::instance* archetype ) noexcept;
+            void RegisterEntity( const PoolDetails Details, archetype::instance* Archetype ) noexcept;
 
             PPB_INLINE // OLD
             void RemoveEntity( const u32 LastIndex, const uint32_t DeletedIndex ) noexcept;
