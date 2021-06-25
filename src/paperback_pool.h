@@ -14,14 +14,13 @@ namespace paperback::vm
 
 		std::span<const component::info* const>										m_ComponentInfo				{   };				// Component Infos
 		std::array<std::byte*, paperback::settings::max_components_per_entity_v>	m_ComponentPool				{   };				// Array of Component Pools
-		uint32_t																	m_MaxEntityCount			{ 0 };				// Max Entity Count
 		uint32_t																	m_CurrentEntityCount		{ 0 };				// Entity Count
 
 		PPB_INLINE
-		uint32_t GetPageIndex( const size_t iComponentType, uint32_t Index ) const noexcept;
+		u32 GetPageIndex( const size_t LocalComponentIndex, u32 Count ) const noexcept;
 
 		PPB_INLINE
-		uint32_t GetPageIndex( const component::info& Info, uint32_t Index ) const noexcept;
+		u32 GetPageIndex( const component::info& Info, u32 Count ) const noexcept;
 
 		PPB_INLINE
 		void Clear() noexcept;
@@ -37,18 +36,15 @@ namespace paperback::vm
 		void Init( int MaxEntites, std::span<const component::info* const> Types ) noexcept;
 
 		PPB_INLINE
-		uint32_t Append() noexcept;
+		u32 Append() noexcept;
 
 		PPB_INLINE
-		uint32_t Delete( const uint32_t pool_index ) noexcept;
+		u32 Delete( const u32 PoolIndex ) noexcept;
 
-		template < typename T > // OLD
-		T& GetComponent( const uint32_t& EntityIndex, const int& ComponentUID ) const noexcept;
-
-		template < typename T_COMPONENT > // NEW
-		T_COMPONENT& GetComponent( const uint32_t PoolIndex ) const noexcept;
+		template < typename T_COMPONENT >
+		T_COMPONENT& GetComponent( const u32 PoolIndex ) const noexcept;
 
 		PPB_INLINE
-		int GetComponentIndex(const int& UIDComponent) const noexcept;
+		int GetComponentIndex( const u32 UIDComponent ) const noexcept;
 	};
 }

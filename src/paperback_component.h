@@ -2,6 +2,7 @@
 
 namespace paperback::component
 {
+    // paperback::component::info
     struct info
     {
         constexpr static auto invalid_id_v = 0xffff;
@@ -26,6 +27,7 @@ namespace paperback::component
         static constexpr auto info_v = component::details::CreateInfo<T>();
     }
 
+    // paperback::component::info_v
     template< typename T >
     constexpr auto& info_v = details::info_v< std::decay_t<T> >;
 	
@@ -39,7 +41,7 @@ namespace paperback::component
             struct
             {
                 uint32_t    m_Generation : 31   // Generation of the Entity (Avoid Collisions)
-                          , m_bZombie    : 1;   // Entity Status
+                ,           m_bZombie    : 1;   // Entity Status
             };
 
             PPB_FORCEINLINE
@@ -67,15 +69,13 @@ namespace paperback::component
 	struct manager
     {
     private:
-        inline static int m_ComponentUID { };
+        inline static int m_ComponentUID = 0;
 
     public:
 
-        // Register Single Component
         template< typename T_COMPONENT >
         void RegisterComponent( void ) noexcept;
 
-        // Register Multiple Components
         template< typename... T_COMPONENTS >
         void RegisterComponents( void ) noexcept;
     };
