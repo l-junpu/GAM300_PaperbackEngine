@@ -11,9 +11,9 @@ namespace paperback::coordinator
 	void instance::Update() noexcept
 	{
 		XCORE_PERF_FRAME_MARK()
-			XCORE_PERF_FRAME_MARK_START("paperback::Frame")
+		XCORE_PERF_FRAME_MARK_START("paperback::Frame")
 
-		m_SystemMgr->Run( *this );
+		m_SystemMgr.Run( *this );
 
 		XCORE_PERF_FRAME_MARK_END("paperback::Frame")
 	}
@@ -21,13 +21,13 @@ namespace paperback::coordinator
 	template < typename... T_SYSTEMS >
 	constexpr void instance::RegisterSystems() noexcept
 	{
-		m_SystemMgr->RegisterSystems<T_SYSTEMS...>( *this );
+		m_SystemMgr.RegisterSystems<T_SYSTEMS...>( *this );
 	}
 
 	template< typename... T_COMPONENTS >
 	constexpr void instance::RegisterComponents( void ) noexcept
 	{
-		m_CompMgr->RegisterComponents<T_COMPONENTS...>();
+		m_CompMgr.RegisterComponents<T_COMPONENTS...>();
 	}
 
 	template < typename... T_COMPONENTS >
@@ -45,16 +45,21 @@ namespace paperback::coordinator
 		[&] < typename... T_COMPONENTS >(std::tuple<T_COMPONENTS...>*)
 		{
 			auto& Archetype = GetOrCreateArchetype<T_COMPONENTS...>();
-			m_EntityMgr->RegisterEntity( Archetype.CreateEntity(Function), &Archetype );
+			m_EntityMgr.RegisterEntity( Archetype.CreateEntity(Function), &Archetype );
 		}(reinterpret_cast<func_traits::args_tuple*>(nullptr));
 	}
 
-	void instance::DeleteEntity( component::Entity& entity ) noexcept
+	template< typename T_FUNCTION >
+	void instance::CreateEntities( T_FUNCTION&& Function, const u32 Count ) noexcept
 	{
-		assert(entity.IsZombie() == false);
-		auto& Info = GetEntityInfo(entity);
-		Info.m_pArchetype->DestroyEntity(entity);
-		assert(entity.IsZombie());
+		
+	}
+
+	void instance::DeleteEntity( component::entity& Entity ) noexcept
+	{
+		assert( Entity.IsZombie() == false );
+		auto& Info = GetEntityInfo( Entity );
+		Info.m_pArchetype->DestroyEntity( Entity );
 	}
 
 	template < typename... T_COMPONENTS >
@@ -198,14 +203,19 @@ namespace paperback::coordinator
 		}
 	}
 
-	const entity::info& instance::GetEntityInfo( component::Entity& entity ) const noexcept
+	entity::info& instance::GetEntityInfo( component::entity& Entity ) const noexcept
 	{
-		return m_EntityMgr->GetEntityInfo(entity);
+		return m_EntityMgr.GetEntityInfo( Entity );
+	}
+
+	entity::info& instance::GetEntityInfo( const u32 GlobalIndex ) const noexcept
+	{
+		return m_EntityMgr.GetEntityInfo( GlobalIndex );
 	}
 	
 	void instance::FreeEntitiesInArchetype( archetype::instance* Archetype ) noexcept
 	{
-		m_EntityMgr->FreeEntitiesInArchetype(Archetype);
+		m_EntityMgr.FreeEntitiesInArchetype(Archetype);
 	}
 
 	//

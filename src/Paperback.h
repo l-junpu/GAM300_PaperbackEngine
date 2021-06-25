@@ -41,6 +41,7 @@ namespace paperback::coordinator
 //----------------------------------
 // Files
 //----------------------------------
+#include "paperback_types.h"
 #include "paperback_settings.h"
 #include "paperback_event.h"
 #include "paperback_component.h"

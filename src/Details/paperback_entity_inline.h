@@ -44,12 +44,12 @@ namespace paperback
             return m_ComponentPool[m_PoolAllocationIndex].Delete( pool_index );
         }
 
-        void instance::DestroyEntity( component::Entity& entity ) noexcept
+        void instance::DestroyEntity( component::entity& Entity ) noexcept
         {
-            assert( entity.IsZombie() == false );
-            entity.m_Validation.m_bZombie = true;
+            assert( Entity.IsZombie() == false );
+            Entity.m_Validation.m_bZombie = true;
             //++entity.m_Validation.m_Generation;
-            m_DeleteList.push_back(entity);
+            m_DeleteList.push_back(Entity);
         }
 
         template < typename T_FUNCTION >
@@ -86,9 +86,9 @@ namespace paperback
             m_EntityInfos[m_EntityIDTracker].m_pArchetype = archetype;
 
             // Modify the Global Index within EntityID Component
-            auto& pEntityID = m_EntityInfos[m_EntityIDTracker].m_pArchetype->GetComponent<component::Entity>(
+            auto& pEntityID = m_EntityInfos[m_EntityIDTracker].m_pArchetype->GetComponent<component::entity>(
                 m_EntityInfos[m_EntityIDTracker].m_PoolIndex,
-                component::info_v<component::Entity>.m_UID
+                component::info_v<component::entity>.m_UID
                 );
 
             pEntityID.m_GlobalIndex = m_EntityIDTracker++;
@@ -104,9 +104,14 @@ namespace paperback
                 m_EntityInfos[LastIndex].m_PoolIndex = PoolIndex;
         }
 
-        const entity::info& manager::GetEntityInfo( const component::Entity entity ) const noexcept
+        entity::info& manager::GetEntityInfo( const component::entity Entity ) const noexcept
         {
-            return m_EntityInfos[entity.m_GlobalIndex];
+            return m_EntityInfos[ Entity.m_GlobalIndex ];
+        }
+
+        entity::info& manager::GetEntityInfo( const u32 GlobalIndex ) const noexcept
+        {
+            return m_EntityInfos[ GlobalIndex ];
         }
 
         archetype::instance& manager::GetArchetypeFromEntity( const uint32_t EntityID ) const noexcept

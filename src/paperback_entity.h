@@ -8,7 +8,7 @@ namespace paperback
         {
             using EntityIDList = std::vector<uint16_t>;
             using ComponentPool = std::array<vm::instance, 2>;
-            using DeleteList = std::vector<component::Entity>;
+            using DeleteList = std::vector<component::entity>;
 
             ComponentPool                 m_ComponentPool{   };                 // Component Pool
             DeleteList                    m_DeleteList{   };                    // List of entities to be deleted
@@ -30,7 +30,7 @@ namespace paperback
             uint32_t DeleteEntity(const uint32_t EntityID) noexcept;
 
             PPB_INLINE
-            void DestroyEntity(component::Entity& entity) noexcept;
+            void DestroyEntity(component::entity& Entity) noexcept;
 
             template < typename T >
             T& GetComponent(const uint32_t& EntityIndex, const int& ComponentUID) const noexcept;
@@ -65,13 +65,16 @@ namespace paperback
             uint32_t                       m_EntityIDTracker = 0;                                              // Global EntityID tracker (Assigned to EntityID Component)
 
             PPB_INLINE
-            void RegisterEntity(const uint32_t entity_id, archetype::instance* archetype) noexcept;
+            void RegisterEntity( const uint32_t entity_id, archetype::instance* archetype ) noexcept;
 
             PPB_INLINE
-            void RemoveEntity(const uint32_t LastIndex, const uint32_t DeletedIndex) noexcept;
+            void RemoveEntity( const uint32_t LastIndex, const uint32_t DeletedIndex ) noexcept;
 
             PPB_INLINE
-            const entity::info& GetEntityInfo(const component::Entity EntityID) const noexcept;
+            entity::info& GetEntityInfo( const component::entity Entity ) const noexcept;
+
+            PPB_INLINE
+            entity::info& GetEntityInfo( const u32 GlobalIndex ) const noexcept;
 
             PPB_INLINE
             archetype::instance& GetArchetypeFromEntity(const uint32_t EntityID) const noexcept;

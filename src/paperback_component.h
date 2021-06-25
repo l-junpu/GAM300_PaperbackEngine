@@ -31,7 +31,7 @@ namespace paperback::component
 	
 
     // paperback::component::entity
-    union Entity final
+    union entity final
     {
         union Validation final
         {
@@ -58,9 +58,9 @@ namespace paperback::component
         constexpr bool IsZombie(void) const noexcept;
 
         PPB_FORCEINLINE
-        constexpr bool operator == ( const Entity& e ) const noexcept;
+        constexpr bool operator == ( const entity& e ) const noexcept;
     };
-    static_assert( sizeof(Entity) == sizeof(uint64_t) );
+    static_assert( sizeof(entity) == sizeof(uint64_t) );
     
 
     // paperback::component::mgr

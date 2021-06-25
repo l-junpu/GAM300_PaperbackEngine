@@ -122,7 +122,7 @@ namespace paperback::vm
 
 		return (m_CurrentEntityCount == 0 || pool_index >= m_CurrentEntityCount)
 				? UINT32_MAX
-				: GetComponent<component::Entity>(pool_index, 0).m_GlobalIndex;
+				: GetComponent<component::entity>(pool_index, 0).m_GlobalIndex;
 	}
 
 

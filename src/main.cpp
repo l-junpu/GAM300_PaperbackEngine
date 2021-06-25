@@ -87,7 +87,7 @@ void InitializeGame()
     // Register Components
     {
         m_Engine.m_Coordinator.RegisterComponents<
-            paperback::component::Entity,
+            paperback::component::entity,
             Bullet,
             Rigidbody,
             Transform,
@@ -111,11 +111,11 @@ void InitializeGame()
     {
         for (int i = 0; i < 1000; ++i)
         {
-            m_Engine.m_Coordinator.CreateEntity([&](component::Entity& id, Transform& transform, Rigidbody& rigidbody, Timer& timer)
+            m_Engine.m_Coordinator.CreateEntity([&]( component::entity& Entity, Transform& transform, Rigidbody& rigidbody, Timer& timer )
                 {
-                    id.m_GlobalIndex = 0;
-                    ++id.m_Validation.m_Generation;
-                    id.m_Validation.m_bZombie = false;
+                    Entity.m_GlobalIndex = 0;
+                    ++Entity.m_Validation.m_Generation;
+                    Entity.m_Validation.m_bZombie = false;
 
                     transform.m_Position.m_X = std::rand() % m_Engine.m_Width;
                     transform.m_Position.m_Y = std::rand() % m_Engine.m_Height;

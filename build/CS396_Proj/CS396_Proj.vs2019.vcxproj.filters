@@ -168,5 +168,8 @@
     <ClInclude Include="..\..\src\paperback_settings.h">
       <Filter>Source Files\Paperback</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\paperback_types.h">
+      <Filter>Source Files\Paperback</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -45,21 +45,21 @@ namespace paperback::component
     template< typename... T_COMPONENTS >
     void manager::RegisterComponents( void ) noexcept
     {
-        ((RegisterComponent<T_COMPONENTS>()), ...);
+        ( (RegisterComponent<T_COMPONENTS>()), ... );
     }
 
-    constexpr bool Entity::Validation::operator == (const Validation& v) const noexcept
+    constexpr bool entity::Validation::operator == ( const Validation& v ) const noexcept
     {
         return m_UID == v.m_UID;
     }
 
-    constexpr bool Entity::IsZombie(void) const noexcept
+    constexpr bool entity::IsZombie( void ) const noexcept
     {
         return m_Validation.m_bZombie;
     }
 
-    constexpr bool Entity::operator == (const Entity& entity) const noexcept
+    constexpr bool entity::operator == ( const entity& Entity ) const noexcept
     {
-        return m_GlobalIndex == entity.m_GlobalIndex;
+        return m_GlobalIndex == Entity.m_GlobalIndex;
     }
 }

@@ -2,5 +2,5 @@
 
 struct Bullet
 {
-	paperback::component::Entity m_Owner;
+	paperback::component::entity m_Owner;
 };

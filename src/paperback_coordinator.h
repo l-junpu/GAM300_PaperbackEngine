@@ -9,14 +9,14 @@ namespace paperback::coordinator
 		using ArchetypeList = std::vector<std::unique_ptr<archetype::instance>>;
 		using ArchetypeBitsList = std::vector<tools::bits>;
 
-		std::unique_ptr< component::manager	  >			m_CompMgr    = std::make_unique< component::manager	>(       );
-		std::unique_ptr< entity::manager >				m_EntityMgr  = std::make_unique< entity::manager    >(       );
-		std::unique_ptr< system::manager >				m_SystemMgr  = std::make_unique< system::manager    >(       );
+		component::manager			m_CompMgr;
+		entity::manager				m_EntityMgr;
+		system::manager				m_SystemMgr;
 
-		ArchetypeList                  m_pArchetypeList;                                     // List of Archetypes
-		ArchetypeBitsList              m_ArchetypeBits;                                      // Bit Signature of Archetypes
+		ArchetypeList               m_pArchetypeList;                // List of Archetypes
+		ArchetypeBitsList           m_ArchetypeBits;                 // Bit Signature of Archetypes
 
-		bool											m_GameActive = true;
+		bool						m_GameActive = true;
 
 	//public:
 
@@ -36,10 +36,13 @@ namespace paperback::coordinator
 		archetype::instance& GetOrCreateArchetype() noexcept;
 
 		template< typename T_FUNCTION >
-		void CreateEntity( T_FUNCTION&& ) noexcept;
+		void CreateEntity( T_FUNCTION&& Function ) noexcept;
+
+		template< typename T_FUNCTION >
+		void CreateEntities( T_FUNCTION&& Function, const u32 Count ) noexcept;
 
 		PPB_INLINE
-		void DeleteEntity( component::Entity& ) noexcept;
+		void DeleteEntity( component::entity& Entity ) noexcept;
 
 		template < typename... T_COMPONENTS >
         std::vector<archetype::instance*> Search() const noexcept;
@@ -58,7 +61,10 @@ namespace paperback::coordinator
         void ForEach( const std::vector<archetype::instance*>& ArchetypeList, T_FUNCTION&& Function ) noexcept;
 
 		PPB_INLINE
-		const entity::info& GetEntityInfo( component::Entity& ) const noexcept;
+		entity::info& GetEntityInfo( component::entity& Entity ) const noexcept;
+
+		PPB_INLINE
+        entity::info& GetEntityInfo( const u32 GlobalIndex ) const noexcept;
 
 		PPB_INLINE // TO REPLACE IN ARCHETYPE
 		void FreeEntitiesInArchetype( archetype::instance* ) noexcept;

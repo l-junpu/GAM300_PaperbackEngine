@@ -9,10 +9,8 @@ struct BulletRenderingSystem : paperback::system::instance
         paperback::query::must<Bullet>
     >;
 
-    void operator()( paperback::component::Entity& entity, Transform& transform, Rigidbody& rigidbody )
+    void operator()( Transform& transform, Rigidbody& rigidbody )
     {
-        if (entity.IsZombie()) return;
-
         constexpr auto ScaleX = 1;
         constexpr auto ScaleY = 3;
         glBegin(GL_TRIANGLES);

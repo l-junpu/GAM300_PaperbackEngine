@@ -11,7 +11,7 @@ struct ShipLogicSystem : paperback::system::instance
         paperback::query::none_of<Bullet>
     >;
 
-    void operator()( paperback::component::Entity& entity, Transform& transform, Timer& timer ) const noexcept
+    void operator()( paperback::component::entity& Entity, Transform& transform, Timer& timer ) const noexcept
     {
         if (timer.m_Timer > 0.0f)
         {
@@ -35,16 +35,16 @@ struct ShipLogicSystem : paperback::system::instance
             {
                 timer.m_Timer = 5;
 
-                m_Engine.m_Coordinator.CreateEntity([&]( paperback::component::Entity& id, Transform& xform, Rigidbody& rb, Timer& timer, Bullet& bullet)
+                m_Engine.m_Coordinator.CreateEntity([&]( paperback::component::entity& Bullet_Entity, Transform& xform, Rigidbody& rb, Timer& timer, Bullet& bullet)
                     {
-                        ++id.m_Validation.m_Generation;
-                        id.m_Validation.m_bZombie = false;
+                        ++Bullet_Entity.m_Validation.m_Generation;
+                        Bullet_Entity.m_Validation.m_bZombie = false;
 
                         Direction /= std::sqrt(DistanceSq);
                         xform.m_Position = transform.m_Position + rb.m_Velocity;
                         rb.m_Velocity = Direction * 3.0f;
 
-                        bullet.m_Owner = entity;
+                        bullet.m_Owner = Entity;
                         timer.m_Timer = 3.0f;
                     }
                 );
