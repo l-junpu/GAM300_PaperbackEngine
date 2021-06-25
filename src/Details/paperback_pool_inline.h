@@ -126,7 +126,7 @@ namespace paperback::vm
 	}
 
 
-	template < typename T >
+	template < typename T > // OLD
 	T& instance::GetComponent( const uint32_t& EntityIndex, const int& ComponentUID ) const noexcept
 	{
 		// assert is same v T_COMPONENT and std::decay T_COMPONENT
@@ -134,7 +134,7 @@ namespace paperback::vm
 		return *( reinterpret_cast<T*>( m_ComponentPool[ComponentIndex] + EntityIndex * m_ComponentInfo[ComponentIndex]->m_Size ) );
 	}
 
-	int instance::GetComponentIndex(const int& UIDComponent) const noexcept
+	int instance::GetComponentIndex(const int& UIDComponent) const noexcept // OLD
 	{
 		// Find index of component within m_ComponentPool
 		for (size_t i = 0, end = m_ComponentInfo.size(); i < end; ++i)
@@ -142,5 +142,16 @@ namespace paperback::vm
 
 		assert(false);
 		return -1;
+	}
+
+	template < typename T_COMPONENT > // NEW
+	T_COMPONENT& instance::GetComponent( const u32 PoolIndex ) const noexcept
+	{
+		auto ComponentIndex = GetComponentIndex( component::info_v<T_COMPONENT>.m_UID );
+
+		return *reinterpret_cast< std::decay_t<T_COMPONENT>* >
+		(
+			&m_ComponentPool[ ComponentIndex ][ PoolIndex * m_ComponentInfo[ComponentIndex]->m_Size] 
+		);
 	}
 }
