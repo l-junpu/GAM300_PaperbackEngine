@@ -9,7 +9,6 @@ namespace paperback::coordinator
 		using ArchetypeList = std::vector<std::unique_ptr<archetype::instance>>;
 		using ArchetypeBitsList = std::vector<tools::bits>;
 
-		//std::unique_ptr< game_mgr::instance	  >			m_GameMgr    = std::make_unique< game_mgr::instance	>( *this );
 		std::unique_ptr< component::manager	  >			m_CompMgr    = std::make_unique< component::manager	>(       );
 		std::unique_ptr< entity::manager >				m_EntityMgr  = std::make_unique< entity::manager    >(       );
 		std::unique_ptr< system::manager >				m_SystemMgr  = std::make_unique< system::manager    >(       );
