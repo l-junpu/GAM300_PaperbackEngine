@@ -6,15 +6,15 @@ namespace paperback::coordinator
 	{
 	//private:
 		
-		using ArchetypeList = std::vector<std::unique_ptr<archetype::instance>>;
-		using ArchetypeBitsList = std::vector<tools::bits>;
+		//using ArchetypeList = std::vector<std::unique_ptr<archetype::instance>>;
+		//using ArchetypeBitsList = std::vector<tools::bits>;
 
 		component::manager			m_CompMgr;
 		entity::manager				m_EntityMgr;
 		system::manager				m_SystemMgr;
 
-		ArchetypeList               m_pArchetypeList;                // List of Archetypes
-		ArchetypeBitsList           m_ArchetypeBits;                 // Bit Signature of Archetypes
+		//ArchetypeList               m_pArchetypeList;                // List of Archetypes
+		//ArchetypeBitsList           m_ArchetypeBits;                 // Bit Signature of Archetypes
 
 		bool						m_GameActive = true;
 
@@ -47,7 +47,7 @@ namespace paperback::coordinator
 		void DeleteEntity( component::entity& Entity ) noexcept;
 
 		PPB_INLINE // TEMPORARY TEST ONLY
-		void RemoveEntity(const uint32_t LastIndex, const vm::PoolDetails Details) noexcept;
+		void RemoveEntity( const uint32_t SwappedGlobalIndex, const component::entity Entity ) noexcept;
 
 		template < typename... T_COMPONENTS >
         std::vector<archetype::instance*> Search() const noexcept;
@@ -73,14 +73,6 @@ namespace paperback::coordinator
 
 		PPB_INLINE // TO REPLACE IN ARCHETYPE
 		void FreeEntitiesInArchetype( archetype::instance* ) noexcept;
-
-
-	// private:
-		PPB_INLINE // NEW
-        archetype::instance& GetOrCreateArchetype( std::span<const component::info* const> Types ) noexcept;
-
-		template < typename... T_COMPONENTS >
-        std::vector<archetype::instance*> Search( std::span<const component::info* const> Types ) const noexcept;
 	};
 }
 

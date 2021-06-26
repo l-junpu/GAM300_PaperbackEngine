@@ -25,21 +25,13 @@ namespace paperback
             PPB_INLINE
             void Init(std::span<const component::info* const> Types) noexcept;
 
-            //NEW TEST
             template< typename T_CALLBACK >
             PoolDetails CreateEntity( T_CALLBACK&& Function ) noexcept;
-
-            PPB_INLINE // NEW
+            
             uint32_t DeleteEntity( const PoolDetails Details ) noexcept;
 
             PPB_INLINE
-            void DestroyEntity(component::entity& Entity) noexcept;
-
-            template < typename T > //OLD
-            T& GetComponent(const uint32_t& EntityIndex, const int& ComponentUID) const noexcept;
-
-            template < typename T > //OLD
-            T& GetComponent(const uint32_t& EntityIndex) const noexcept;
+            void DestroyEntity( component::entity& Entity ) noexcept;
 
             template < typename T_COMPONENT >
             T_COMPONENT& GetComponent( const PoolDetails Details ) const noexcept;
@@ -68,22 +60,28 @@ namespace paperback
         struct manager
         {
             using PoolDetails    = vm::PoolDetails;
+            using EntityListHead = std::priority_queue<u32>;
             using EntityInfoList = std::unique_ptr<entity::info[]>;
+            using ArchetypeBitsList = std::vector<tools::bits>;
+            using ArchetypeList = std::vector<std::unique_ptr<archetype::instance>>;
 
-            EntityInfoList                 m_EntityInfos = std::make_unique<entity::info[]>(100000);           // Contains information of each entity
-            uint32_t                       m_EntityIDTracker = 0;                                              // Global EntityID tracker (Assigned to EntityID Component)
+            EntityInfoList                 m_EntityInfos = std::make_unique<entity::info[]>(settings::max_entities_v);
+            ArchetypeList                  m_pArchetypeList;
+            ArchetypeBitsList              m_ArchetypeBits;
+            uint32_t                       m_EntityIDTracker = 0;
+            EntityListHead                 m_AvailableIndexes;
 
-            //PPB_INLINE // OLD
-            //void RegisterEntity( const u32 entity_id, archetype::instance* archetype ) noexcept;
+            PPB_INLINE // Could be private
+            u32 AppendEntity() noexcept;
 
-            PPB_INLINE // NEW
-            void RegisterEntity( const PoolDetails Details, archetype::instance* Archetype ) noexcept;
+            PPB_INLINE
+            void RegisterEntity( const PoolDetails Details, archetype::instance& Archetype ) noexcept;
 
-            PPB_INLINE // OLD
-            void RemoveEntity( const u32 LastIndex, const uint32_t DeletedIndex ) noexcept;
+            template < typename T_FUNCTION >
+            void CreateEntity( T_FUNCTION&& Function, coordinator::instance& Coordinator ) noexcept;
 
-            PPB_INLINE // NEW
-            void RemoveEntity( const u32 LastIndex, const PoolDetails Details ) noexcept;
+            PPB_INLINE
+            void RemoveEntity( const u32 SwappedGlobalIndex, const component::entity DeletedEntity ) noexcept;
 
             PPB_INLINE
             entity::info& GetEntityInfo( const component::entity Entity ) const noexcept;
@@ -96,6 +94,23 @@ namespace paperback
 
             PPB_INLINE
             void FreeEntitiesInArchetype( archetype::instance* Archetype ) noexcept;
+
+
+
+            template < typename... T_COMPONENTS > // NEW INTERFACE
+            archetype::instance& GetOrCreateArchetype(coordinator::instance& Coordinator) noexcept;
+
+            template < typename... T_COMPONENTS > // NEW INTERFACE
+            std::vector<archetype::instance*> Search() const noexcept;
+
+            PPB_INLINE // NEW INTERFACE
+            std::vector<archetype::instance*> Search( const tools::query& Query ) const noexcept;
+
+            PPB_INLINE // NEW PRIVATE
+            archetype::instance& GetOrCreateArchetype( std::span<const component::info* const> Types, coordinator::instance& Coordinator ) noexcept;
+
+            template < typename... T_COMPONENTS > // NEW PRIVATE
+            std::vector<archetype::instance*> Search(std::span<const component::info* const> Types) const noexcept;
         };
     }
 }

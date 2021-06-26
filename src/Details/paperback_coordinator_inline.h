@@ -38,20 +38,13 @@ namespace paperback::coordinator
 	template < typename... T_COMPONENTS >
 	archetype::instance& instance::GetOrCreateArchetype() noexcept
 	{
-		static constexpr auto ComponentList = std::array{ &component::info_v<T_COMPONENTS>... };
-		return GetOrCreateArchetype( ComponentList );
+		return m_EntityMgr.GetOrCreateArchetype<T_COMPONENTS...>( *this );
 	}
 
 	template< typename T_FUNCTION >
 	void instance::CreateEntity( T_FUNCTION&& Function ) noexcept
 	{
-		using func_traits = xcore::function::traits<T_FUNCTION>;
-
-		[&] < typename... T_COMPONENTS >(std::tuple<T_COMPONENTS...>*)
-		{
-			auto& Archetype = GetOrCreateArchetype<T_COMPONENTS...>();
-			m_EntityMgr.RegisterEntity( Archetype.CreateEntity(Function), &Archetype );
-		}(reinterpret_cast<func_traits::args_tuple*>(nullptr));
+		m_EntityMgr.CreateEntity( Function, *this );
 	}
 
 	template< typename T_FUNCTION >
@@ -69,33 +62,20 @@ namespace paperback::coordinator
 	}
 
 	//TEMPORARY TEST ONLY
-	void instance::RemoveEntity(const uint32_t LastIndex, const vm::PoolDetails Details) noexcept
+	void instance::RemoveEntity( const uint32_t SwappedGlobalIndex, const component::entity Entity ) noexcept
 	{
-		m_EntityMgr.RemoveEntity( LastIndex, Details );
+		m_EntityMgr.RemoveEntity( SwappedGlobalIndex, Entity );
 	}
 
 	template < typename... T_COMPONENTS >
 	std::vector<archetype::instance*> instance::Search() const noexcept
 	{
-		static constexpr auto ComponentList = std::array{ &component::info_v<T_COMPONENTS>... };
-		return Search( ComponentList );
+		return m_EntityMgr.Search<T_COMPONENTS...>();
 	}
 	
 	std::vector<archetype::instance*> instance::Search( const tools::query& Query ) const noexcept
 	{
-		std::vector<archetype::instance*> ValidArchetypes{};
-	
-		// Search for all Archetypes with valid Bit Signatures
-		for (const auto& ArchetypeBits : m_ArchetypeBits)
-		{
-			if (Query.Compare(ArchetypeBits))
-			{
-				const auto index = static_cast<size_t>(&ArchetypeBits - &m_ArchetypeBits[0]);
-				ValidArchetypes.push_back(m_pArchetypeList[index].get());
-			}
-		}
-	
-		return ValidArchetypes;
+		return m_EntityMgr.Search( Query );
 	}
 
 	template < typename T_FUNCTION>
@@ -230,50 +210,50 @@ namespace paperback::coordinator
 	//
 	// PRIVATE FUNCTIONS
 	//
-	archetype::instance& instance::GetOrCreateArchetype(std::span<const component::info* const> Types) noexcept
-	{
-		// Set Component Bits
-		tools::bits Query{};
+	//archetype::instance& instance::GetOrCreateArchetype(std::span<const component::info* const> Types) noexcept
+	//{
+	//	// Set Component Bits
+	//	tools::bits Query{};
 
-		for (const auto& CInfo : Types)
-			Query.Set(CInfo->m_UID);
+	//	for (const auto& CInfo : Types)
+	//		Query.Set(CInfo->m_UID);
 
-		// Search for all Archetypes with valid Bit Signatures
-		for (auto& Archetype : m_ArchetypeBits)
-		{
-			if (Archetype.Compare(Query))
-			{
-				const auto index = static_cast<size_t>(&Archetype - &m_ArchetypeBits[0]);
-				return *(m_pArchetypeList[index]);
-			}
-		}
+	//	// Search for all Archetypes with valid Bit Signatures
+	//	for (auto& Archetype : m_ArchetypeBits)
+	//	{
+	//		if (Archetype.Compare(Query))
+	//		{
+	//			const auto index = static_cast<size_t>(&Archetype - &m_ArchetypeBits[0]);
+	//			return *(m_pArchetypeList[index]);
+	//		}
+	//	}
 
-		m_pArchetypeList.push_back( std::make_unique<archetype::instance>( *this, Query ) );
-		m_ArchetypeBits.push_back(Query);
+	//	m_pArchetypeList.push_back( std::make_unique<archetype::instance>( *this, Query ) );
+	//	m_ArchetypeBits.push_back(Query);
 
-		m_pArchetypeList.back()->Init(Types);
+	//	m_pArchetypeList.back()->Init(Types);
 
-		return *(m_pArchetypeList.back());
-	}
+	//	return *(m_pArchetypeList.back());
+	//}
 
-	template < typename... T_COMPONENTS >
-	std::vector<archetype::instance*> instance::Search(std::span<const component::info* const> Types) const noexcept
-	{
-		tools::bits Query;
-		std::vector<archetype::instance*> ValidArchetypes{};
+	//template < typename... T_COMPONENTS >
+	//std::vector<archetype::instance*> instance::Search(std::span<const component::info* const> Types) const noexcept
+	//{
+	//	tools::bits Query;
+	//	std::vector<archetype::instance*> ValidArchetypes{};
 
-		for (const auto& cInfo : Types)
-			Query.Set(cInfo->m_UID);
+	//	for (const auto& cInfo : Types)
+	//		Query.Set(cInfo->m_UID);
 
-		for (auto& Archetype : m_ArchetypeBits)
-		{
-			if (Archetype.Compare(Query))
-			{
-				const auto Index = static_cast<size_t>(&Archetype - &m_ArchetypeBits[0]);
-				ValidArchetypes.push_back(m_pArchetypeList[Index].get());
-			}
-		}
+	//	for (auto& Archetype : m_ArchetypeBits)
+	//	{
+	//		if (Archetype.Compare(Query))
+	//		{
+	//			const auto Index = static_cast<size_t>(&Archetype - &m_ArchetypeBits[0]);
+	//			ValidArchetypes.push_back(m_pArchetypeList[Index].get());
+	//		}
+	//	}
 
-		return ValidArchetypes;
-	}
+	//	return ValidArchetypes;
+	//}
 }
