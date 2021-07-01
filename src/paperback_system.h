@@ -8,7 +8,6 @@ namespace paperback::system
 
 		PPB_INLINE
 		instance( coordinator::instance& Coordinator ) noexcept;
-
 		//instance(const instance&) = delete;
 
 		PPB_INLINE

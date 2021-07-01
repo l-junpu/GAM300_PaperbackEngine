@@ -29,7 +29,6 @@
     <ClInclude Include="..\..\src\Details\paperback_coordinator_inline.h" />
     <ClInclude Include="..\..\src\Details\paperback_entity_inline.h" />
     <ClInclude Include="..\..\src\Details\paperback_event_inline.h" />
-    <ClInclude Include="..\..\src\Details\paperback_gamemanager_inline.h" />
     <ClInclude Include="..\..\src\Details\paperback_pool_inline.h" />
     <ClInclude Include="..\..\src\Details\paperback_query_inline.h" />
     <ClInclude Include="..\..\src\Details\paperback_system_inline.h" />
@@ -40,7 +39,6 @@
     <ClInclude Include="..\..\src\paperback_coordinator.h" />
     <ClInclude Include="..\..\src\paperback_entity.h" />
     <ClInclude Include="..\..\src\paperback_event.h" />
-    <ClInclude Include="..\..\src\paperback_gamemanager.h" />
     <ClInclude Include="..\..\src\paperback_pool.h" />
     <ClInclude Include="..\..\src\paperback_query.h" />
     <ClInclude Include="..\..\src\paperback_settings.h" />

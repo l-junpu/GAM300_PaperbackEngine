@@ -2,7 +2,6 @@
 
 namespace paperback::component
 {
-    // paperback::component::info
     struct info
     {
         constexpr static auto invalid_id_v = 0xffff;
@@ -15,8 +14,9 @@ namespace paperback::component
         mutable uint32_t       m_Size;
         Constructor*           m_Constructor;
         Destructor*            m_Destructor;
-        Move*                  m_MoveConstructor;
+        Move*                  m_Move;
     };
+
 
     namespace details
     {
@@ -27,12 +27,11 @@ namespace paperback::component
         static constexpr auto info_v = component::details::CreateInfo<T>();
     }
 
-    // paperback::component::info_v
-    template< typename T >
-    constexpr auto& info_v = details::info_v< std::decay_t<T> >;
+    // component::info_v<T_COMPONENT>
+    template< typename T_COMPONENT >
+    constexpr auto& info_v = details::info_v< std::decay_t<T_COMPONENT> >;
 	
 
-    // paperback::component::entity
     union entity final
     {
         union Validation final
@@ -40,12 +39,12 @@ namespace paperback::component
             uint32_t        m_UID;
             struct
             {
-                uint32_t    m_Next : 31         // Index of next Entity within Entity Manager (For Deletion)
+                uint32_t    m_Next : 31         // Index of next Entity within Entity Manager (For Deletion) - Currently Unused
                 ,           m_bZombie    : 1;   // Entity Status
             };
 
             PPB_FORCEINLINE
-            constexpr bool operator == (const Validation& v) const noexcept;
+            constexpr bool operator == ( const Validation& V ) const noexcept;
         };
         static_assert( sizeof(Validation) == sizeof(uint32_t) );
 
@@ -57,10 +56,10 @@ namespace paperback::component
         };
 
         PPB_FORCEINLINE
-        constexpr bool IsZombie(void) const noexcept;
+        constexpr bool IsZombie( void ) const noexcept;
 
         PPB_FORCEINLINE
-        constexpr bool operator == ( const entity& e ) const noexcept;
+        constexpr bool operator == ( const entity& Entity ) const noexcept;
     };
     static_assert( sizeof(entity) == sizeof(uint64_t) );
     

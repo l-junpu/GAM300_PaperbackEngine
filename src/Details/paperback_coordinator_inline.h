@@ -61,7 +61,7 @@ namespace paperback::coordinator
 		Info.m_pArchetype->DestroyEntity( Entity );
 	}
 
-	//TEMPORARY TEST ONLY
+	//TEMPORARY TEST ONLY (Try to remove)
 	void instance::RemoveEntity( const uint32_t SwappedGlobalIndex, const component::entity Entity ) noexcept
 	{
 		m_EntityMgr.RemoveEntity( SwappedGlobalIndex, Entity );
@@ -90,7 +90,6 @@ namespace paperback::coordinator
 			// Temporarily using only pool Index[0]
 			auto& Pool = Archetype->m_ComponentPool[0];
 
-			// Generates an Array of m_UID's to relevant Components
 			auto ComponentPtrs = [&]<typename... T_COMPONENTS>(std::tuple<T_COMPONENTS...>*) constexpr noexcept
 			{
 				return std::array
@@ -123,9 +122,9 @@ namespace paperback::coordinator
 							if constexpr (std::is_pointer_v<T_C>)		return reinterpret_cast<T_C>(p);
 							else										return reinterpret_cast<T_C>(*p);
 
-						}(xcore::types::make_null_tuple_v<T_COMPONENTS>)
-							...);
-					}(xcore::types::null_tuple_v<func_traits::args_tuple>);
+						}( xcore::types::make_null_tuple_v<T_COMPONENTS> )
+							... );
+					}( xcore::types::null_tuple_v<func_traits::args_tuple> );
 				}
 			});
 		}
@@ -143,7 +142,6 @@ namespace paperback::coordinator
 			// Temporarily using only pool Index[0]
 			auto& Pool = Archetype->m_ComponentPool[0];
 
-			// Generates an Array of m_UID's to relevant Components
 			auto ComponentPtrs = [&]<typename... T_COMPONENTS>(std::tuple<T_COMPONENTS...>*) constexpr noexcept
 			{
 				return std::array
@@ -164,7 +162,7 @@ namespace paperback::coordinator
 			{
 				for (int i = Pool.m_CurrentEntityCount; i; --i)
 				{
-					if ( [&]<typename... T_COMPONENTS>(std::tuple<T_COMPONENTS...>*) constexpr noexcept
+					if ([&]<typename... T_COMPONENTS>(std::tuple<T_COMPONENTS...>*) constexpr noexcept
 					{
 						return Function([&]<typename T_C>(std::tuple<T_C>*) constexpr noexcept -> T_C
 						{
@@ -204,56 +202,6 @@ namespace paperback::coordinator
 	
 	void instance::FreeEntitiesInArchetype( archetype::instance* Archetype ) noexcept
 	{
-		m_EntityMgr.FreeEntitiesInArchetype(Archetype);
+		m_EntityMgr.FreeEntitiesInArchetype( Archetype );
 	}
-
-	//
-	// PRIVATE FUNCTIONS
-	//
-	//archetype::instance& instance::GetOrCreateArchetype(std::span<const component::info* const> Types) noexcept
-	//{
-	//	// Set Component Bits
-	//	tools::bits Query{};
-
-	//	for (const auto& CInfo : Types)
-	//		Query.Set(CInfo->m_UID);
-
-	//	// Search for all Archetypes with valid Bit Signatures
-	//	for (auto& Archetype : m_ArchetypeBits)
-	//	{
-	//		if (Archetype.Compare(Query))
-	//		{
-	//			const auto index = static_cast<size_t>(&Archetype - &m_ArchetypeBits[0]);
-	//			return *(m_pArchetypeList[index]);
-	//		}
-	//	}
-
-	//	m_pArchetypeList.push_back( std::make_unique<archetype::instance>( *this, Query ) );
-	//	m_ArchetypeBits.push_back(Query);
-
-	//	m_pArchetypeList.back()->Init(Types);
-
-	//	return *(m_pArchetypeList.back());
-	//}
-
-	//template < typename... T_COMPONENTS >
-	//std::vector<archetype::instance*> instance::Search(std::span<const component::info* const> Types) const noexcept
-	//{
-	//	tools::bits Query;
-	//	std::vector<archetype::instance*> ValidArchetypes{};
-
-	//	for (const auto& cInfo : Types)
-	//		Query.Set(cInfo->m_UID);
-
-	//	for (auto& Archetype : m_ArchetypeBits)
-	//	{
-	//		if (Archetype.Compare(Query))
-	//		{
-	//			const auto Index = static_cast<size_t>(&Archetype - &m_ArchetypeBits[0]);
-	//			ValidArchetypes.push_back(m_pArchetypeList[Index].get());
-	//		}
-	//	}
-
-	//	return ValidArchetypes;
-	//}
 }

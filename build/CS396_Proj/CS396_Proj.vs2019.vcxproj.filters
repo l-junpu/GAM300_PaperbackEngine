@@ -114,9 +114,6 @@
     <ClInclude Include="..\..\src\paperback_event.h">
       <Filter>Source Files\Paperback</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\paperback_gamemanager.h">
-      <Filter>Source Files\Paperback</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\paperback_pool.h">
       <Filter>Source Files\Paperback</Filter>
     </ClInclude>
@@ -139,9 +136,6 @@
       <Filter>Source Files\Paperback\Details</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\Details\paperback_event_inline.h">
-      <Filter>Source Files\Paperback\Details</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\Details\paperback_gamemanager_inline.h">
       <Filter>Source Files\Paperback\Details</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\Details\paperback_pool_inline.h">

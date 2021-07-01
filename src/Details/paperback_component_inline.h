@@ -2,6 +2,7 @@
 
 namespace paperback::component
 {
+    // Info
     namespace details
     {
         template< typename T_COMPONENT >
@@ -23,7 +24,7 @@ namespace paperback::component
                       {
                           std::destroy_at( reinterpret_cast<T_COMPONENT*>(p) );
                       }
-            ,   .m_MoveConstructor = std::is_trivially_move_assignable_v<T_COMPONENT>
+            ,   .m_Move = std::is_trivially_move_assignable_v<T_COMPONENT>
                     ? nullptr
                     : [](std::byte* d, std::byte* s) noexcept
                       {
@@ -34,6 +35,7 @@ namespace paperback::component
     }
 
 	
+    // Manager
     template< typename T_COMPONENT >
     void manager::RegisterComponent( void ) noexcept
     {
@@ -41,16 +43,15 @@ namespace paperback::component
             component::info_v<T_COMPONENT>.m_UID = m_ComponentUID++;
     }
 
-    // Register Multiple Components
     template< typename... T_COMPONENTS >
     void manager::RegisterComponents( void ) noexcept
     {
         ( (RegisterComponent<T_COMPONENTS>()), ... );
     }
 
-    constexpr bool entity::Validation::operator == ( const Validation& v ) const noexcept
+    constexpr bool entity::Validation::operator == ( const Validation& V ) const noexcept
     {
-        return m_UID == v.m_UID;
+        return m_UID == V.m_UID;
     }
 
     constexpr bool entity::IsZombie( void ) const noexcept

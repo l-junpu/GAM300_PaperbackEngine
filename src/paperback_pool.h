@@ -12,15 +12,15 @@ namespace paperback::vm
 	{
 	//private:
 
-		std::span<const component::info* const>										m_ComponentInfo				{   };				// Component Infos
-		std::array<std::byte*, paperback::settings::max_components_per_entity_v>	m_ComponentPool				{   };				// Array of Component Pools
-		uint32_t																	m_CurrentEntityCount		{ 0 };				// Entity Count
+		std::span<const component::info* const>										m_ComponentInfo				{   };
+		std::array<std::byte*, paperback::settings::max_components_per_entity_v>	m_ComponentPool				{   };
+		uint32_t																	m_CurrentEntityCount		{ 0 };
 
 		PPB_INLINE
-		u32 GetPageIndex( const size_t LocalComponentIndex, u32 Count ) const noexcept;
+		u32 GetPageIndex( const size_t LocalComponentIndex, const u32 Count ) const noexcept;
 
 		PPB_INLINE
-		u32 GetPageIndex( const component::info& Info, u32 Count ) const noexcept;
+		u32 GetPageIndex( const component::info& Info, const u32 Count ) const noexcept;
 
 		PPB_INLINE
 		void Clear() noexcept;
@@ -33,7 +33,7 @@ namespace paperback::vm
 		~instance() noexcept;
 
 		PPB_INLINE
-		void Init( int MaxEntites, std::span<const component::info* const> Types ) noexcept;
+		void Init( std::span<const component::info* const> Types ) noexcept;
 
 		PPB_INLINE
 		u32 Append() noexcept;

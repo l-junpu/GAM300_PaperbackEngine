@@ -56,7 +56,7 @@ namespace paperback::system
 
 	void manager::Run( coordinator::instance& Coordinator ) noexcept
 	{
-		for (const auto& System : m_Systems)
+		for ( const auto& System : m_Systems )
 			System.m_CallRun( *System.m_System, Coordinator );
 	}
 }

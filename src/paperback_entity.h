@@ -6,29 +6,30 @@ namespace paperback
     {
         struct instance
         {
-            using PoolDetails = vm::PoolDetails;
-            using EntityIDList = std::vector<uint16_t>;
+            using PoolDetails   = vm::PoolDetails;
+            using EntityIDList  = std::vector<uint16_t>;
             using ComponentPool = std::array<vm::instance, 2>;
-            using DeleteList = std::vector<component::entity>;
+            using DeleteList    = std::vector<component::entity>;
 
             coordinator::instance&        m_Coordinator;
-            ComponentPool                 m_ComponentPool{   };                 // Component Pool
-            DeleteList                    m_DeleteList{   };                    // List of entities to be deleted
-            tools::bits                   m_ComponentBits{   };                 // Component Signature
-            uint32_t                      m_EntityCount{ 0 };                   // Number of Entities within Archetype
-            uint32_t                      m_PoolAllocationIndex{ 0 };           // Determines which pool to allocate to - 0 Default
-            uint32_t                      m_ProcessReference{ 0 };              // Set to 1 when Archetype is updating
+            ComponentPool                 m_ComponentPool            {   };           // Component Pool
+            DeleteList                    m_DeleteList               {   };           // List of entities to be deleted
+            tools::bits                   m_ComponentBits            {   };           // Component Signature
+            uint32_t                      m_EntityCount              { 0 };           // Number of Entities within Archetype
+            uint32_t                      m_PoolAllocationIndex      { 0 };           // Determines which pool to allocate to - 0 Default
+            uint32_t                      m_ProcessReference         { 0 };           // Set to 1 when Archetype is updating
 
             PPB_INLINE
             instance( coordinator::instance& Coordinator, const tools::bits& ComponentBits) noexcept;
 
             PPB_INLINE
-            void Init(std::span<const component::info* const> Types) noexcept;
+            void Init( std::span<const component::info* const> Types ) noexcept;
 
             template< typename T_CALLBACK >
             PoolDetails CreateEntity( T_CALLBACK&& Function ) noexcept;
             
-            uint32_t DeleteEntity( const PoolDetails Details ) noexcept;
+            PPB_INLINE
+            u32 DeleteEntity( const PoolDetails Details ) noexcept;
 
             PPB_INLINE
             void DestroyEntity( component::entity& Entity ) noexcept;
@@ -59,20 +60,17 @@ namespace paperback
 
         struct manager
         {
-            using PoolDetails    = vm::PoolDetails;
-            using EntityListHead = std::priority_queue<u32>;
-            using EntityInfoList = std::unique_ptr<entity::info[]>;
+            using PoolDetails       = vm::PoolDetails;
+            using EntityListHead    = std::priority_queue<u32>;
+            using EntityInfoList    = std::unique_ptr<entity::info[]>;
             using ArchetypeBitsList = std::vector<tools::bits>;
-            using ArchetypeList = std::vector<std::unique_ptr<archetype::instance>>;
+            using ArchetypeList     = std::vector<std::unique_ptr<archetype::instance>>;
 
-            EntityInfoList                 m_EntityInfos = std::make_unique<entity::info[]>(settings::max_entities_v);
-            ArchetypeList                  m_pArchetypeList;
-            ArchetypeBitsList              m_ArchetypeBits;
-            uint32_t                       m_EntityIDTracker = 0;
-            EntityListHead                 m_AvailableIndexes;
-
-            PPB_INLINE // Could be private
-            u32 AppendEntity() noexcept;
+            EntityInfoList            m_EntityInfos       = std::make_unique<entity::info[]>( settings::max_entities_v );
+            ArchetypeList             m_pArchetypeList    {   };
+            ArchetypeBitsList         m_ArchetypeBits     {   };
+            uint32_t                  m_EntityIDTracker   { 0 };
+            EntityListHead            m_AvailableIndexes  {   };
 
             PPB_INLINE
             void RegisterEntity( const PoolDetails Details, archetype::instance& Archetype ) noexcept;
@@ -82,6 +80,9 @@ namespace paperback
 
             PPB_INLINE
             void RemoveEntity( const u32 SwappedGlobalIndex, const component::entity DeletedEntity ) noexcept;
+
+            template < typename... T_COMPONENTS >
+            archetype::instance& GetOrCreateArchetype(coordinator::instance& Coordinator) noexcept;
 
             PPB_INLINE
             entity::info& GetEntityInfo( const component::entity Entity ) const noexcept;
@@ -95,22 +96,23 @@ namespace paperback
             PPB_INLINE
             void FreeEntitiesInArchetype( archetype::instance* Archetype ) noexcept;
 
-
-
-            template < typename... T_COMPONENTS > // NEW INTERFACE
-            archetype::instance& GetOrCreateArchetype(coordinator::instance& Coordinator) noexcept;
-
-            template < typename... T_COMPONENTS > // NEW INTERFACE
+            template < typename... T_COMPONENTS >
             std::vector<archetype::instance*> Search() const noexcept;
 
-            PPB_INLINE // NEW INTERFACE
+            PPB_INLINE
             std::vector<archetype::instance*> Search( const tools::query& Query ) const noexcept;
 
-            PPB_INLINE // NEW PRIVATE
+
+
+            // PRIVATE
+            PPB_INLINE
+            u32 AppendEntity() noexcept;
+
+            PPB_INLINE
             archetype::instance& GetOrCreateArchetype( std::span<const component::info* const> Types, coordinator::instance& Coordinator ) noexcept;
 
-            template < typename... T_COMPONENTS > // NEW PRIVATE
-            std::vector<archetype::instance*> Search(std::span<const component::info* const> Types) const noexcept;
+            template < typename... T_COMPONENTS >
+            std::vector<archetype::instance*> Search( std::span<const component::info* const> Types ) const noexcept;
         };
     }
 }

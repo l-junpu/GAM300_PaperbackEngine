@@ -2,21 +2,21 @@
 
 namespace paperback::vm
 {
-	u32 instance::GetPageIndex( const size_t LocalComponentIndex, u32 Count ) const noexcept
+	u32 instance::GetPageIndex( const size_t LocalComponentIndex, const u32 Count ) const noexcept
 	{
-		return (m_ComponentInfo[LocalComponentIndex]->m_Size * Count) / settings::virtual_page_size_v;
+		return ( m_ComponentInfo[LocalComponentIndex]->m_Size * Count ) / settings::virtual_page_size_v;
 	}
 
-	u32 instance::GetPageIndex( const component::info& Info, u32 Count ) const noexcept
+	u32 instance::GetPageIndex( const component::info& Info, const u32 Count ) const noexcept
 	{
-		return ((Info.m_Size * Count) - 1) / settings::virtual_page_size_v;
+		return ( ( Info.m_Size * Count ) - 1 ) / settings::virtual_page_size_v;
 	}
 
 	void instance::Clear() noexcept
 	{
-		while (m_CurrentEntityCount)
+		while ( m_CurrentEntityCount )
 		{
-			Delete(m_CurrentEntityCount-1);
+			Delete( m_CurrentEntityCount-1 );
 		}
 	}
 
@@ -24,19 +24,19 @@ namespace paperback::vm
 	{
 		Clear();
 
-		for (auto cPool : m_ComponentPool)
+		for ( auto cPool : m_ComponentPool )
 		{
-			if (cPool)
-				VirtualFree(cPool, 0, MEM_RELEASE);
+			if ( cPool )
+				VirtualFree( cPool, 0, MEM_RELEASE );
 		}
 	}
 
-	void instance::Init( int MaxEntites, std::span<const component::info* const> Types ) noexcept
+	void instance::Init( std::span<const component::info* const> Types ) noexcept
 	{
 		m_ComponentInfo = Types;
 
 		// Reserve memory required for MaxEntites
-		for (std::size_t i = 0; i < m_ComponentInfo.size(); i++)
+		for ( std::size_t i = 0; i < m_ComponentInfo.size(); i++ )
 		{
 			auto nPages = GetPageIndex( *m_ComponentInfo[i], settings::max_entities_v ) + 1;
 			m_ComponentPool[i] = reinterpret_cast<std::byte*>( VirtualAlloc(nullptr, nPages * paperback::settings::virtual_page_size_v, MEM_RESERVE, PAGE_NOACCESS) );
@@ -57,16 +57,16 @@ namespace paperback::vm
 			auto iNextpage =  GetPageIndex( CInfo, m_CurrentEntityCount + 1 );
 
 			// Commit new memory in m_ComponentPool's page if the page is full
-			if (iCurPage != iNextpage)
+			if ( iCurPage != iNextpage )
 			{
 				auto pEndOfCurrentPool = m_ComponentPool[i] + iNextpage * paperback::settings::virtual_page_size_v;
 				auto pNewPool = VirtualAlloc(pEndOfCurrentPool, paperback::settings::virtual_page_size_v, MEM_COMMIT, PAGE_READWRITE);
 
-				assert(pNewPool == pEndOfCurrentPool);
+				assert( pNewPool == pEndOfCurrentPool );
 			}
 
 			// Invoke constructor for Component (If Required)
-			if (m_ComponentInfo[i]->m_Constructor)
+			if ( m_ComponentInfo[i]->m_Constructor )
 			{
 				m_ComponentInfo[i]->m_Constructor(m_ComponentPool[i] + m_CurrentEntityCount * m_ComponentInfo[i]->m_Size);
 			}
@@ -83,7 +83,7 @@ namespace paperback::vm
 		// Return back to the current index
 		--m_CurrentEntityCount;
 
-		for (size_t i = 0; i < m_ComponentInfo.size(); ++i)
+		for ( size_t i = 0; i < m_ComponentInfo.size(); ++i )
 		{
 			const auto& pInfo = *m_ComponentInfo[i];
 			auto		pData =  m_ComponentPool[i];
@@ -92,14 +92,14 @@ namespace paperback::vm
 			if ( PoolIndex == m_CurrentEntityCount )
 			{
 				if ( pInfo.m_Destructor )
-					pInfo.m_Destructor(&pData[m_CurrentEntityCount * pInfo.m_Size]);
+					pInfo.m_Destructor( &pData[m_CurrentEntityCount * pInfo.m_Size] );
 			}
 			// Deleting any other Entity
 			else
 			{
-				if ( pInfo.m_MoveConstructor )
+				if ( pInfo.m_Move )
 				{
-					pInfo.m_MoveConstructor( &pData[PoolIndex * pInfo.m_Size], &pData[m_CurrentEntityCount * pInfo.m_Size] );
+					pInfo.m_Move( &pData[PoolIndex * pInfo.m_Size], &pData[m_CurrentEntityCount * pInfo.m_Size] );
 				}
 				else
 				{
@@ -113,7 +113,7 @@ namespace paperback::vm
 			const auto LastPage = GetPageIndex( pInfo, m_CurrentEntityCount + 1 );
 			if ( LastPage != GetPageIndex(pInfo, m_CurrentEntityCount) )
 			{
-				auto pRaw = &pData[paperback::settings::virtual_page_size_v * LastPage];
+				auto pRaw = &pData[ paperback::settings::virtual_page_size_v * LastPage ];
 				auto b = VirtualFree( pRaw, paperback::settings::virtual_page_size_v, MEM_DECOMMIT );
 				assert(b);
 			}
@@ -138,10 +138,10 @@ namespace paperback::vm
 	int instance::GetComponentIndex( const u32 UIDComponent ) const noexcept
 	{
 		// Find index of component within m_ComponentPool
-		for (size_t i = 0, end = m_ComponentInfo.size(); i < end; ++i)
-			if (m_ComponentInfo[i]->m_UID == UIDComponent) { return static_cast<int>(i); }
+		for ( size_t i = 0, end = m_ComponentInfo.size(); i < end; ++i )
+			if ( m_ComponentInfo[i]->m_UID == UIDComponent ) { return static_cast<int>(i); }
 
-		assert(false);
+		assert( false );
 		return -1;
 	}
 }

@@ -52,19 +52,19 @@ namespace tools
 	template<typename... T_QUERIES >
 	void query::AddQueryFromTuple( std::tuple<T_QUERIES...>* ) noexcept
 	{
-		auto Param_Query = [&]< template<typename...> class T_QTYPE, typename... T_COMPONENTS >( T_QTYPE<T_COMPONENTS...>* )
+		auto Param_Query = [&]<template<typename...> class T_QTYPE, typename... T_COMPONENTS>( T_QTYPE<T_COMPONENTS...>* )
 		{
 			using Query_Tuple = T_QTYPE<T_COMPONENTS...>;
 	
-			if constexpr (std::is_same_v< Query_Tuple, paperback::query::must<T_COMPONENTS...> >)
+			if constexpr ( std::is_same_v< Query_Tuple, paperback::query::must<T_COMPONENTS...> > )
 			{
 				m_Must.AddFromComponents<T_COMPONENTS...>();
 			}
-			else if constexpr (std::is_same_v< Query_Tuple, paperback::query::one_of<T_COMPONENTS...> >)
+			else if constexpr ( std::is_same_v< Query_Tuple, paperback::query::one_of<T_COMPONENTS...> > )
 			{
 				m_OneOf.AddFromComponents<T_COMPONENTS...>();
 			}
-			else if constexpr (std::is_same_v< Query_Tuple, paperback::query::none_of<T_COMPONENTS...> >)
+			else if constexpr ( std::is_same_v< Query_Tuple, paperback::query::none_of<T_COMPONENTS...> > )
 			{
 				m_NoneOf.AddFromComponents<T_COMPONENTS...>();
 			}

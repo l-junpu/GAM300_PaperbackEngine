@@ -2,14 +2,14 @@
 
 namespace tools
 {
-    void bits::Set( int Bit ) noexcept
+    void bits::Set( const int Bit ) noexcept
     {
 		int x = Bit / 64;
 		int y = Bit % 64;
 		m_bits[x] |= (1ull << y);
     }
 
-    bool bits::Has( int Bit ) const noexcept
+    bool bits::Has( const int Bit ) const noexcept
     {
 		int x = Bit / 64;
 		int y = Bit % 64;
@@ -17,22 +17,22 @@ namespace tools
 		return !!(m_bits[x] & (1ull << y));
     }
 
-    bool bits::Match(const bits& B) const noexcept
+    bool bits::Match( const bits& Query ) const noexcept
     {
 		for (size_t i = 0, size = m_bits.size(); i < size; ++i)
         {
-            if ((m_bits[i] & B.m_bits[i]) != m_bits[i])
+            if ((m_bits[i] & Query.m_bits[i]) != m_bits[i])
                 return false;
         }
 
         return true;
     }
 
-    bool bits::Compare(const bits& B) const noexcept
+    bool bits::Compare( const bits& Query ) const noexcept
     {
 		for (size_t i = 0, size = m_bits.size(); i < size; ++i)
         {
-            if ((m_bits[i] & B.m_bits[i]) != B.m_bits[i])
+            if ((m_bits[i] & Query.m_bits[i]) != Query.m_bits[i])
                 return false;
         }
 

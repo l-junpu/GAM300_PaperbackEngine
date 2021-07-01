@@ -4,17 +4,10 @@ namespace paperback::coordinator
 {
 	struct instance final
 	{
-	//private:
-		
-		//using ArchetypeList = std::vector<std::unique_ptr<archetype::instance>>;
-		//using ArchetypeBitsList = std::vector<tools::bits>;
 
 		component::manager			m_CompMgr;
 		entity::manager				m_EntityMgr;
 		system::manager				m_SystemMgr;
-
-		//ArchetypeList               m_pArchetypeList;                // List of Archetypes
-		//ArchetypeBitsList           m_ArchetypeBits;                 // Bit Signature of Archetypes
 
 		bool						m_GameActive = true;
 
@@ -46,7 +39,7 @@ namespace paperback::coordinator
 		PPB_INLINE
 		void DeleteEntity( component::entity& Entity ) noexcept;
 
-		PPB_INLINE // TEMPORARY TEST ONLY
+		PPB_INLINE // TEMPORARY TEST ONLY (Try to remove)
 		void RemoveEntity( const uint32_t SwappedGlobalIndex, const component::entity Entity ) noexcept;
 
 		template < typename... T_COMPONENTS >
@@ -72,7 +65,7 @@ namespace paperback::coordinator
         entity::info& GetEntityInfo( const u32 GlobalIndex ) const noexcept;
 
 		PPB_INLINE // TO REPLACE IN ARCHETYPE
-		void FreeEntitiesInArchetype( archetype::instance* ) noexcept;
+		void FreeEntitiesInArchetype( archetype::instance* Archetype ) noexcept;
 	};
 }
 

@@ -1,8 +1,5 @@
 #include "Paperback.h"
 
-#define GLUT_STATIC_LIB
-#include "../dependencies/glut/include/GL/glut.h"
-
 // Game Components
 #include "Timer.h"
 #include "Bullet.h"

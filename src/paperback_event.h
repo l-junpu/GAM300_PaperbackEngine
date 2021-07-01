@@ -12,8 +12,8 @@ namespace paperback::event
 			void* 			 m_pClass;
 		};
 
-		template <auto T_FUNCTION, typename T>
-		constexpr void Register( T& Class ) noexcept;
+		template <auto T_FUNCTION, typename T_CLASS>
+		constexpr void Register( T_CLASS& Class ) noexcept;
 
 		PPB_INLINE
 		void NotifyAll( T_ARGS... Args ) noexcept;
