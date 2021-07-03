@@ -9,6 +9,13 @@ namespace tools
 		m_bits[x] |= (1ull << y);
     }
 
+    void bits::Remove( const int Bit ) noexcept
+    {
+        int x = Bit / 64;
+        int y = Bit % 64;
+        m_bits[x] &= ~(1ull << y);
+    }
+
     bool bits::Has( const int Bit ) const noexcept
     {
 		int x = Bit / 64;

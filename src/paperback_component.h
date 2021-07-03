@@ -30,6 +30,15 @@ namespace paperback::component
     // component::info_v<T_COMPONENT>
     template< typename T_COMPONENT >
     constexpr auto& info_v = details::info_v< std::decay_t<T_COMPONENT> >;
+
+
+    // component::info_array_v
+    template < typename T_TUPLE >
+	static constexpr auto info_array_v = []<typename... T_COMPONENTS>( std::tuple<T_COMPONENTS>* )
+	{
+		if constexpr ( sizeof...(T_COMPONENTS) == 0 )   return std::span<const component::info*>{};
+		else                                            return std::array{ &component::info_v<T_COMPONENTS>... };
+	}( xcore::types::null_tuple_v< T_TUPLE > );
 	
 
     union entity final

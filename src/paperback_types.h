@@ -2,8 +2,7 @@
 
 namespace paperback
 {
-	using empty_lambda = decltype([](){});
-
+	// Typedefs
 	using u8  = std::uint8_t;
 	using u16 = std::uint16_t;
 	using u32 = std::uint32_t;
@@ -30,4 +29,39 @@ namespace paperback
 
 	using f32 = float;
 	using f64 = double;
+
+	using empty_lambda = decltype([]() {});
+
+
+	// Details
+	namespace details
+	{
+
+	}
+
+
+	// Concepts (C++20)
+	namespace concepts
+	{
+		template < typename T_SYSTEM >
+		concept System = std::derived_from< T_SYSTEM, system::instance >;
+
+		template< typename T_FUNCTION = empty_lambda >
+		concept Callable = xcore::function::is_callable_v< T_FUNCTION >;
+
+		template< typename T_FUNCTION >
+		concept Callable_Void = Callable< T_FUNCTION > && std::is_same_v< void, typename xcore::function::traits<T_FUNCTION>::return_type >;
+
+		template< typename T_FUNCTION >
+		concept Callable_Bool = Callable< T_FUNCTION > && std::is_same_v< bool, typename xcore::function::traits<T_FUNCTION>::return_type >;
+
+		template < typename T_CONTAINER >
+		concept TupleSpecialization = xcore::types::is_specialized_v< std::tuple, T_CONTAINER >;
+
+		//template < typename T_CONTAINER >
+		//concept STL_Iteratable = requires( T_CONTAINER Container )
+		//{
+		//	{ Container.begin() } -> 
+		//};
+	}
 }

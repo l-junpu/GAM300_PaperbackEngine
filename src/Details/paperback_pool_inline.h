@@ -124,6 +124,70 @@ namespace paperback::vm
 				 : GetComponent<component::entity>( PoolIndex ).m_GlobalIndex;
 	}
 
+	u32 instance::TransferExistingComponents( const PoolDetails& Details, vm::instance& FromPool ) noexcept
+	{
+		const u32 NewPoolIndex = Append();
+
+        u32 iPoolFrom = 0;
+        u32 iPoolTo   = 0;
+
+        while( true )
+        {
+			// If Component Already Exists
+            if( FromPool.m_ComponentInfo[ iPoolFrom ] == m_ComponentInfo[ iPoolTo ] )
+            {
+                auto& Info = *( FromPool.m_ComponentInfo[iPoolFrom] );
+                if( Info.m_Move )
+                {
+                    Info.m_Move
+                    (
+                        &m_ComponentPool[ iPoolTo ][ Info.m_Size* NewPoolIndex ]
+                    ,   &FromPool.m_ComponentPool[ iPoolFrom ][ Info.m_Size* Details.m_PoolIndex ]
+                    );
+                }
+                else
+                {
+                    std::memcpy
+                    ( 
+                        &m_ComponentPool[ iPoolTo ][ Info.m_Size * NewPoolIndex ]
+                    ,   &FromPool.m_ComponentPool[ iPoolFrom ][ Info.m_Size * Details.m_PoolIndex ]
+                    ,   Info.m_Size
+                    );
+                }
+                //iPoolFrom++;
+                //iPoolTo++;
+                if ( ++iPoolFrom >= FromPool.m_ComponentInfo.size() || ++iPoolTo >= m_ComponentInfo.size()) break;
+            }
+			// If Component exists in old pool but NOT new pool, delete it
+            else if( FromPool.m_ComponentInfo[ iPoolFrom ]->m_UID < m_ComponentInfo[ iPoolTo ]->m_UID )
+            {
+                auto& Info = *( FromPool.m_ComponentInfo[ iPoolFrom ] );
+                if( Info.m_Destructor ) Info.m_Destructor( &FromPool.m_ComponentPool[ iPoolFrom ][ Info.m_Size * Details.m_PoolIndex ] );
+                //++iPoolFrom;
+                if ( ++iPoolFrom >= FromPool.m_ComponentInfo.size() ) break;
+            }
+			// If Component exists in new pool but NOT old pool, do nothing
+            else
+            {
+                //++iPoolTo;
+                if ( ++iPoolTo >= m_ComponentInfo.size() ) break;
+            }
+        }
+
+        // Remove any remaining Components
+        while ( iPoolFrom < FromPool.m_ComponentInfo.size() )
+        {
+            auto& Info = *( FromPool.m_ComponentInfo[ iPoolFrom ] );
+            if ( Info.m_Destructor ) Info.m_Destructor( &FromPool.m_ComponentPool[ iPoolFrom ][ Info.m_Size * Details.m_PoolIndex ] );
+            //++iPoolFrom;
+            if ( ++iPoolFrom >= FromPool.m_ComponentInfo.size() ) break;
+        }
+
+        // Put the deleted entity into the move deleted linklist (Need to change to GUID and implement linked list deletion first)
+
+        return NewPoolIndex;
+	}
+
 	template < typename T_COMPONENT >
 	T_COMPONENT& instance::GetComponent( const u32 PoolIndex ) const noexcept
 	{

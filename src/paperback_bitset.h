@@ -10,6 +10,9 @@ namespace tools
         void Set( const int Bit ) noexcept;
 
         PPB_FORCEINLINE
+        void Remove( const int Bit ) noexcept;
+
+        PPB_FORCEINLINE
         bool Has( const int Bit ) const noexcept;
 		
         PPB_INLINE

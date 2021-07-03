@@ -41,6 +41,9 @@ namespace paperback::vm
 		PPB_INLINE
 		u32 Delete( const u32 PoolIndex ) noexcept;
 
+		PPB_INLINE
+		u32 TransferExistingComponents( const PoolDetails& Details, vm::instance& Pool ) noexcept;
+
 		template < typename T_COMPONENT >
 		T_COMPONENT& GetComponent( const u32 PoolIndex ) const noexcept;
 

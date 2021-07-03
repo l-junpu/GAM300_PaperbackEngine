@@ -32,7 +32,40 @@ namespace paperback::component
                       }
             };
         }
+
+
+        template< typename T_A, typename T_B >
+        struct component_comparator
+        {
+            constexpr static bool value = component::info_v<T_A>.m_UID < component::info_v<T_B>.m_UID;
+        };
+
+        template< concepts::TupleSpecialization T_TUPLE >
+        using sort_tuple_t = xcore::types::tuple_sort_t< details::component_comparator, T_TUPLE >;
+
+
+        // Find Component Index in Container
+        template < typename T_CONTAINER >
+        static constexpr auto find_component_index_v = [&]( T_CONTAINER& Container, component::info* Info, size_t Count )
+        {
+            return static_cast<size_t>( std::upper_bound( std::begin( Container )
+                                                        , std::begin( Container ) + Count
+                                                        , Info
+                                                        , []( const component::info* pA, const component::info* pB)
+                                                          {
+                                                              return pA->m_UID < pB->m_UID;
+                                                          }
+                                                        ) - std::begin( Container )
+                                      );
+        };
     }
+
+    template< concepts::TupleSpecialization T_TUPLE >
+    static constexpr auto sorted_info_array_v = []<typename...T>( std::tuple<T...>* ) constexpr
+    {
+        if constexpr ( sizeof...(T) == 0 ) return std::span<const component::info*>{};
+        else                               return std::array{ &component::info_v<T>... };
+    }( xcore::types::null_tuple_v< sort_tuple_t<T_TUPLE> > );
 
 	
     // Manager

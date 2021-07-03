@@ -12,6 +12,7 @@ namespace paperback
         void instance::Init( std::span<const component::info* const> Types ) noexcept
         {
             m_ComponentPool[m_PoolAllocationIndex].Init( Types );
+            m_ComponentInfos = Types;
         }
 
         template< typename T_CALLBACK >
@@ -92,6 +93,39 @@ namespace paperback
         {
             return m_ComponentPool[ Details.m_Key ].GetComponent<T_COMPONENT>( Details.m_PoolIndex );
         }
+
+        template < typename T_FUNCTION >
+        component::entity& instance::TransferExistingEntity( component::entity& Entity, T_FUNCTION&& Function ) noexcept
+        {
+            using func_traits = xcore::function::traits<T_FUNCTION>;
+
+            auto& EntityInfo = m_Coordinator.GetEntityInfo( Entity.m_GlobalIndex );
+            const auto NewPoolIndex = m_ComponentPool[ m_PoolAllocationIndex ].TransferExistingComponents
+            (
+                EntityInfo.m_PoolDetails
+            ,   EntityInfo.m_pArchetype.m_ComponentPool[ EntityInfo.m_PoolDetails.m_Key ]
+            );
+
+            EntityInfo.m_pArchetype = this;
+            EntityInfo.m_PoolDetails.m_Key = m_PoolAllocationIndex;
+            EntityInfo.m_PoolDetails.m_PoolIndex = NewPoolIndex;
+
+            // TEMP
+            [&]<typename... T_COMPONENTS>( std::tuple<T_COMPONENTS...>* )
+            {
+                assert( m_ComponentBits.Has( component::info_v<T_COMPONENTS>.m_UID ) && ... );
+        
+                // const auto PoolIndex = m_ComponentPool[ m_PoolAllocationIndex ].Append();
+
+                if ( !std::is_same_v<empty_lambda, T_FUNCTION> )
+                {
+                    Function( m_ComponentPool[m_PoolAllocationIndex].GetComponent<T_COMPONENTS>(NewPoolIndex) ... );
+                }
+
+                // GOTTA RETURN ENTITY COMPONENT WITH UPDATED INDEX
+
+            }( reinterpret_cast<func_traits::args_tuple*>( nullptr ) );
+        }
     }
 
     namespace entity
@@ -150,6 +184,14 @@ namespace paperback
             return GetOrCreateArchetype( ComponentList, Coordinator );
         }
 
+        template < typename... T_COMPONENTS > // PRIVATE FN
+        archetype::instance& manager::CreateArchetype( coordinator::instance& Coordinator, const tools::bits& Signature ) noexcept
+        {
+            m_pArchetypeList.push_back( std::make_unique<archetype::instance>( *this ) );
+			m_ArchetypeBits.push_back( Signature );
+            return *( m_pArchetypeList.back() );
+        }
+
         entity::info& manager::GetEntityInfo( const component::entity Entity ) const noexcept
         {
             return m_EntityInfos[ Entity.m_GlobalIndex ];
@@ -190,6 +232,19 @@ namespace paperback
         {
             static constexpr auto ComponentList = std::array{ &component::info_v<T_COMPONENTS>... };
             return Search( ComponentList );
+        }
+
+        archetype::instance* manager::Search( const tools::bits& Bits ) const noexcept
+        {
+            for ( const auto& ArchetypeBits : m_ArchetypeBits )
+            {
+                if ( ArchetypeBits.Match( Bits ) )
+                {
+                    const auto index = static_cast<size_t>( &ArchetypeBits - &m_ArchetypeBits[0] );
+                    return m_pArchetypeList[index].get();
+                }
+            }
+            return nullptr;
         }
 
         std::vector<archetype::instance*> manager::Search( const tools::query& Query ) const noexcept

@@ -21,7 +21,7 @@ namespace paperback::coordinator
 		PPB_INLINE
 		void Update() noexcept;
 
-		template < typename... T_SYSTEMS >
+		template < concepts::System... T_SYSTEMS >
 		constexpr void RegisterSystems() noexcept;
 		
 		template< typename... T_COMPONENTS >
@@ -42,20 +42,25 @@ namespace paperback::coordinator
 		PPB_INLINE // TEMPORARY TEST ONLY (Try to remove)
 		void RemoveEntity( const uint32_t SwappedGlobalIndex, const component::entity Entity ) noexcept;
 
+		template < concepts::TupleSpecialization T_TUPLE_ADD
+				 , concepts::TupleSpecialization T_TUPLE_REMOVE = std::tuple<>
+				 , concepts::Callable T_FUNCTION                = empty_lambda >
+		component::entity AddOrRemoveComponents( component::entity Entity
+											   , T_FUNCTION&& Function ) noexcept;
+		
 		template < typename... T_COMPONENTS >
         std::vector<archetype::instance*> Search() const noexcept;
+
+		PPB_INLINE
+        archetype::instance* Search( const tools::bits& Bits ) const noexcept;
 
         PPB_INLINE
         std::vector<archetype::instance*> Search( const tools::query& Query ) const noexcept;
         
-        template < typename T_FUNCTION>
-        requires( xcore::function::is_callable_v<T_FUNCTION> &&
-                  std::is_same_v< void, typename xcore::function::traits<T_FUNCTION>::return_type > )
+        template < concepts::Callable_Void T_FUNCTION>
         void ForEach( const std::vector<archetype::instance*>& ArchetypeList, T_FUNCTION&& Function ) noexcept;
 
-        template < typename T_FUNCTION>
-        requires( xcore::function::is_callable_v<T_FUNCTION> && 
-			      std::is_same_v< bool, typename xcore::function::traits<T_FUNCTION>::return_type > )
+        template < concepts::Callable_Bool T_FUNCTION>
         void ForEach( const std::vector<archetype::instance*>& ArchetypeList, T_FUNCTION&& Function ) noexcept;
 
 		PPB_INLINE
@@ -66,6 +71,13 @@ namespace paperback::coordinator
 
 		PPB_INLINE // TO REPLACE IN ARCHETYPE
 		void FreeEntitiesInArchetype( archetype::instance* Archetype ) noexcept;
+
+		// NEW PRIVATE FN
+		template < concepts::Callable T_FUNCTION >
+		component::entity AddOrRemoveComponents ( const component::entity Entity, 
+												  std::span<const component::info* const> Add,
+												  std::span<const component::info* const> Remove,
+												  T_FUNCTION&& Function = empty_lambda{} ) noexcept;
 	};
 }
 

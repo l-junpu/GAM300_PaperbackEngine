@@ -34,9 +34,20 @@
 //----------------------------------
 // Forward Declaration
 //----------------------------------
-namespace paperback::coordinator
+namespace paperback
 {
-    struct instance;
+	namespace coordinator
+	{
+		struct instance;
+	}
+	namespace system
+	{
+		struct instance;
+	}
+	namespace component
+	{
+		struct info;
+	}
 }
 
 //----------------------------------
