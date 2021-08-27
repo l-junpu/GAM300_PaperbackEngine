@@ -30,6 +30,10 @@ namespace paperback::system
 			Coordinator.ForEach( Coordinator.Search(Query), *this );
 		}
 	}
+
+	manager::manager( tools::clock& Clock ) :
+		m_SystemClock{ Clock }
+	{ }
 	
 	template < typename... T_SYSTEMS >
 	constexpr void manager::RegisterSystems( coordinator::instance& Coordinator ) noexcept
@@ -56,6 +60,7 @@ namespace paperback::system
 
 	void manager::Run( coordinator::instance& Coordinator ) noexcept
 	{
+		m_SystemClock.Tick();
 		for ( const auto& System : m_Systems )
 			System.m_CallRun( *System.m_System, Coordinator );
 	}

@@ -15,9 +15,10 @@ struct ShipLogicSystem : paperback::system::instance
     {
         if (timer.m_Timer > 0.0f)
         {
-            timer.m_Timer -= 0.01f;
+            timer.m_Timer -= m_Coordinator.DeltaTime();
             return;
         }
+
 
         tools::query Query;
         Query.m_NoneOf.AddFromComponents<Bullet>();
@@ -38,8 +39,8 @@ struct ShipLogicSystem : paperback::system::instance
                 m_Engine.m_Coordinator.CreateEntity([&]( paperback::component::entity& Bullet_Entity, Transform& xform, Rigidbody& rb, Timer& timer, Bullet& bullet)
                 {
                     Direction /= std::sqrt(DistanceSq);
-                    xform.m_Position = transform.m_Position + rb.m_Velocity;
-                    rb.m_Velocity = Direction * 3.0f;
+                    rb.m_Velocity = Direction * 80.0f;
+                    xform.m_Position = transform.m_Position;
 
                     bullet.m_Owner = Entity;
                     timer.m_Timer = 3.0f;

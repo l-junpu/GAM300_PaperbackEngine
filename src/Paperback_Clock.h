@@ -9,33 +9,32 @@
 
 namespace tools
 {
-	class clock
-	{
-	public:
+    class clock
+    {
+    public:
 
-		using HRClock = std::chrono::high_resolution_clock;
-		using TimePoint = HRClock::time_point;
-		using Duration = std::chrono::duration<float>;
+        using HRClock = std::chrono::high_resolution_clock;
+        using TimePoint = HRClock::time_point;
+        using Duration = std::chrono::duration<float>;
 
-		const float m_FixedDT;
+        clock( float TimeScale = 1.0f ) noexcept;
+        ~clock() = default;
 
-		clock(float TimeScale = 1.0f);
-		~clock() = default;
+        uint32_t FPS() noexcept;
+        void     Tick() noexcept;
+        float    DeltaTime() const noexcept;
+        auto     Now() noexcept -> decltype( HRClock::now() );
+        float    ComputeTime( TimePoint StartingTime ) noexcept;
 
-		uint32_t FPS();
-		void Tick();
-		float DeltaTime() const;
-		auto Now() -> decltype(HRClock::now());
-		float ComputeTime(TimePoint StartingTime);
+        void     TimeScale( const float s = 1.0f ) noexcept;
+        float    TimeScale() const noexcept;
 
-		void TimeScale(const float& s = 1.0f);
-		float TimeScale() const;
+    private:
 
-	private:
-
-		float m_TimeElapsed;
-		float m_TimeScale;
-		Duration m_DT;
-		TimePoint m_Start;
-	};
+        const float   m_FixedDT;
+        float         m_TimeElapsed;
+        float         m_TimeScale;
+        Duration      m_DT;
+        TimePoint     m_Start;
+    };
 }

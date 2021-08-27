@@ -6,11 +6,11 @@
 
 struct BulletLogicSystem : paperback::system::instance
 {
-    void operator()(paperback::component::entity& Entity, Transform& transform, Timer& timer, Bullet& bullet) const noexcept
+    void operator()( paperback::component::entity& Entity, Transform& transform, Timer& timer, Bullet& bullet ) const noexcept
     {
         if (Entity.IsZombie()) return;
 
-        timer.m_Timer -= 0.01f;
+        timer.m_Timer -= m_Coordinator.DeltaTime();
         if (timer.m_Timer <= 0.0f)
         {
             m_Coordinator.DeleteEntity(Entity);

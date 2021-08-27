@@ -15,7 +15,6 @@
     <ClCompile Include="..\..\dependencies\xcore\src\xcore_profiler_1.cpp" />
     <ClCompile Include="..\..\dependencies\xcore\src\xcore_profiler_2.cpp" />
     <ClCompile Include="..\..\src\main.cpp" />
-    <ClCompile Include="..\..\src\Paperback_Clock.cpp" />
     <ClCompile Include="..\..\src\PCH.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -25,6 +24,7 @@
     <ClInclude Include="..\..\src\BulletLogicSystem.h" />
     <ClInclude Include="..\..\src\BulletRenderingSystem.h" />
     <ClInclude Include="..\..\src\Details\paperback_bitset_inline.h" />
+    <ClInclude Include="..\..\src\Details\paperback_clock_inline.h" />
     <ClInclude Include="..\..\src\Details\paperback_component_inline.h" />
     <ClInclude Include="..\..\src\Details\paperback_coordinator_inline.h" />
     <ClInclude Include="..\..\src\Details\paperback_entity_inline.h" />
@@ -34,7 +34,7 @@
     <ClInclude Include="..\..\src\Details\paperback_system_inline.h" />
     <ClInclude Include="..\..\src\Paperback.h" />
     <ClInclude Include="..\..\src\paperback_bitset.h" />
-    <ClInclude Include="..\..\src\Paperback_Clock.h" />
+    <ClInclude Include="..\..\src\paperback_clock.h" />
     <ClInclude Include="..\..\src\paperback_component.h" />
     <ClInclude Include="..\..\src\paperback_coordinator.h" />
     <ClInclude Include="..\..\src\paperback_entity.h" />

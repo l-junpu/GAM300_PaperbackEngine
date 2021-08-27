@@ -39,7 +39,9 @@ namespace paperback::system
 			call_run*										m_CallRun;
 		};
 
-		std::vector<info>									m_Systems;
+		manager( tools::clock& Clock );
+		~manager() = default;
+
 
 		template < typename... T_SYSTEMS >
 		constexpr void RegisterSystems( coordinator::instance& Coordinator ) noexcept;
@@ -54,6 +56,8 @@ namespace paperback::system
 		PPB_INLINE
 		void Run( coordinator::instance& Coordinator ) noexcept;
 
+		tools::clock&		m_SystemClock;
+		std::vector<info>	m_Systems;
 		// bool m_bPaused;
 	};
 }

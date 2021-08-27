@@ -114,43 +114,44 @@ namespace paperback::coordinator
 			// Temporarily using only pool Index[0]
 			auto& Pool = Archetype->m_ComponentPool[0];
 
-			auto ComponentPtrs = [&]<typename... T_COMPONENTS>(std::tuple<T_COMPONENTS...>*) constexpr noexcept
+			auto ComponentPtrs = [&]<typename... T_COMPONENTS>( std::tuple<T_COMPONENTS...>* ) constexpr noexcept
 			{
 				return std::array
 				{
-					[&] <typename T_C>( std::tuple<T_C>* ) constexpr noexcept
+					[&]< typename T_C >( std::tuple<T_C>* ) constexpr noexcept
 					{
 						const auto I = Pool.GetComponentIndex(component::info_v<T_C>.m_UID);
 						if constexpr (std::is_pointer_v<T_C>)	return (I < 0) ? nullptr : Pool.m_ComponentPool[I];
 						else									return Pool.m_ComponentPool[I];
-					}(xcore::types::make_null_tuple_v<T_COMPONENTS>)
+					}( xcore::types::make_null_tuple_v<T_COMPONENTS> )
 						...
 				};
-			}( xcore::types::null_tuple_v<func_traits::args_tuple> );
+			}( xcore::types::null_tuple_v< func_traits::args_tuple > );
 
 			Archetype->AccessGuard([&]
 			{
 				for (int i = Pool.m_CurrentEntityCount; i; --i)
 				{
-					[&]<typename... T_COMPONENTS>( std::tuple<T_COMPONENTS...>* ) constexpr noexcept
+					[&]< typename... T_COMPONENTS >( std::tuple<T_COMPONENTS...>* ) constexpr noexcept
 					{
-						//auto ComponentArray = Archetype->GetComponentArray(Pool, i, xcore::types::null_tuple_v<func_traits::args_tuple>);
+						//auto ComponentArray = Archetype->GetComponentArray(Pool, i, xcore::types::null_tuple_v< component_type_args::value >);
 
-						Function([&]<typename T_C>( std::tuple<T_C>* ) constexpr noexcept -> T_C
-						{
-							auto& pComponent = /*ComponentArray*/ComponentPtrs[xcore::types::tuple_t2i_v<T_C, typename func_traits::args_tuple>];
+						Function( [&]<typename T_C>( std::tuple<T_C>* ) constexpr noexcept -> T_C
+								  {
+									  auto& pComponent = /*ComponentArray*/ComponentPtrs[xcore::types::tuple_t2i_v< T_C, typename func_traits::args_tuple >];
+								  
+									  if constexpr (std::is_pointer_v<T_C>) if (pComponent == nullptr) return reinterpret_cast<T_C>(nullptr);
+								  
+									  auto p = pComponent;
+									  pComponent += sizeof(std::decay_t<T_C>);
+								  
+									  if constexpr (std::is_pointer_v<T_C>)		return reinterpret_cast<T_C>(p);
+									  else										return reinterpret_cast<T_C>(*p);
+								  
+								  }( xcore::types::make_null_tuple_v<T_COMPONENTS> )
+						... );
 
-							if constexpr (std::is_pointer_v<T_C>) if (pComponent == nullptr) return reinterpret_cast<T_C>(nullptr);
-
-							auto p = pComponent;								// Back up the pointer
-							pComponent += sizeof(std::decay_t<T_C>);			// Get ready for the next entity
-
-							if constexpr (std::is_pointer_v<T_C>)		return reinterpret_cast<T_C>(p);
-							else										return reinterpret_cast<T_C>(*p);
-
-						}( xcore::types::make_null_tuple_v<T_COMPONENTS> )
-							... );
-					}( xcore::types::null_tuple_v<func_traits::args_tuple> );
+					}( xcore::types::null_tuple_v< func_traits::args_tuple > );
 				}
 			});
 		}
@@ -159,26 +160,26 @@ namespace paperback::coordinator
 	template < concepts::Callable_Bool T_FUNCTION >
 	void instance::ForEach( const std::vector<archetype::instance*>& ArchetypeList, T_FUNCTION&& Function ) noexcept
 	{
-		using func_traits = xcore::function::traits<T_FUNCTION>;
+		using func_traits = xcore::function::traits< T_FUNCTION >;
 
-		for (const auto& Archetype : ArchetypeList)
+		for ( const auto& Archetype : ArchetypeList )
 		{
 			// Temporarily using only pool Index[0]
 			auto& Pool = Archetype->m_ComponentPool[0];
 
-			auto ComponentPtrs = [&]<typename... T_COMPONENTS>(std::tuple<T_COMPONENTS...>*) constexpr noexcept
+			auto ComponentPtrs = [&]< typename... T_COMPONENTS >( std::tuple<T_COMPONENTS...>* ) constexpr noexcept
 			{
 				return std::array
 				{
-					[&]<typename T_C>(std::tuple<T_C>*) constexpr noexcept
+					[&]< typename T_C >( std::tuple<T_C>* ) constexpr noexcept
 					{
 						const auto I = Pool.GetComponentIndex( component::info_v<T_C>.m_UID );
-						if constexpr (std::is_pointer_v<T_C>)	return (I < 0) ? nullptr : Pool.m_ComponentPool[I];
+						if constexpr ( std::is_pointer_v<T_C> )	return ( I < 0 ) ? nullptr : Pool.m_ComponentPool[I];
 						else									return Pool.m_ComponentPool[I];
 					}( xcore::types::make_null_tuple_v<T_COMPONENTS> )
 						...
 				};
-			}( xcore::types::null_tuple_v<func_traits::args_tuple> );
+			}( xcore::types::null_tuple_v< func_traits::args_tuple > );
 
 			bool bBreak = false;
 
@@ -186,23 +187,23 @@ namespace paperback::coordinator
 			{
 				for (int i = Pool.m_CurrentEntityCount; i; --i)
 				{
-					if ([&]<typename... T_COMPONENTS>(std::tuple<T_COMPONENTS...>*) constexpr noexcept
+					if ( [&]<typename... T_COMPONENTS>( std::tuple<T_COMPONENTS...>* ) constexpr noexcept
 					{
-						return Function([&]<typename T_C>(std::tuple<T_C>*) constexpr noexcept -> T_C
-						{
-							auto& pComponent = ComponentPtrs[xcore::types::tuple_t2i_v<T_C, typename func_traits::args_tuple>];
+						return Function( [&]<typename T_C>(std::tuple<T_C>*) constexpr noexcept -> T_C
+										 {
+						                 	  auto& pComponent = ComponentPtrs[xcore::types::tuple_t2i_v< T_C, typename func_traits::args_tuple >];
+						                 	  
+						                 	  if constexpr (std::is_pointer_v<T_C>) if (pComponent == nullptr) return reinterpret_cast<T_C>(nullptr);
+						                 	  
+						                 	  auto p = pComponent;
+						                 	  pComponent += sizeof(std::decay_t<T_C>);
+						                 	  
+						                 	  if constexpr (std::is_pointer_v<T_C>)		return reinterpret_cast<T_C>(p);
+						                 	  else										return reinterpret_cast<T_C>(*p);
 
-							if constexpr (std::is_pointer_v<T_C>) if (pComponent == nullptr) return reinterpret_cast<T_C>(nullptr);
-
-							auto p = pComponent;								// Back up the pointer
-							pComponent += sizeof(std::decay_t<T_C>);			// Get ready for the next entity
-
-							if constexpr (std::is_pointer_v<T_C>)		return reinterpret_cast<T_C>(p);
-							else										return reinterpret_cast<T_C>(*p);
-
-						}( xcore::types::make_null_tuple_v<T_COMPONENTS> )
+										 }( xcore::types::make_null_tuple_v<T_COMPONENTS> )
 						... );
-					}( xcore::types::null_tuple_v<func_traits::args_tuple> ) )
+					}( xcore::types::null_tuple_v< func_traits::args_tuple > ) )
 					{
 						bBreak = true;
 						break;
@@ -312,5 +313,20 @@ namespace paperback::coordinator
 			if constexpr ( std::is_same_v<T_FUNCTION, empty_lambda> ) return Archetype.TransferExistingEntity( Entity );
 			else                                                      return Archetype.TransferExistingEntity( Entity, Function );
 		}
+	}
+
+	float instance::DeltaTime() const noexcept
+	{
+		return m_Clock.DeltaTime();
+	}
+
+    void instance::TimeScale( const float s ) noexcept
+	{
+		m_Clock.TimeScale( s );
+	}
+
+	float instance::TimeScale() const noexcept
+	{
+		return m_Clock.TimeScale();
 	}
 }

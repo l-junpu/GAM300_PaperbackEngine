@@ -11,8 +11,8 @@ struct BulletRenderingSystem : paperback::system::instance
 
     void operator()( Transform& transform, Rigidbody& rigidbody )
     {
-        constexpr auto ScaleX = 1;
-        constexpr auto ScaleY = 3;
+        constexpr auto ScaleX = 1 / 24.0f;
+        constexpr auto ScaleY = 3 / 24.0f;
         glBegin(GL_TRIANGLES);
         glColor3f(1.0f, 0.0f, 0.0f);
         glVertex2i(transform.m_Position.m_X + rigidbody.m_Velocity.m_X * ScaleY, transform.m_Position.m_Y + rigidbody.m_Velocity.m_Y * ScaleY);

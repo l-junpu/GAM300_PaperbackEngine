@@ -4,10 +4,10 @@ namespace paperback::coordinator
 {
 	struct instance final
 	{
-
+		tools::clock				m_Clock;
 		component::manager			m_CompMgr;
 		entity::manager				m_EntityMgr;
-		system::manager				m_SystemMgr;
+		system::manager				m_SystemMgr{ m_Clock };
 
 		bool						m_GameActive = true;
 
@@ -78,6 +78,14 @@ namespace paperback::coordinator
 												  std::span<const component::info* const> Add,
 												  std::span<const component::info* const> Remove,
 												  T_FUNCTION&& Function = empty_lambda{} ) noexcept;
+		PPB_FORCEINLINE
+		float DeltaTime() const noexcept;
+
+		PPB_FORCEINLINE
+        void TimeScale( const float s = 1.0f ) noexcept;
+
+		PPB_FORCEINLINE
+        float TimeScale() const noexcept;
 	};
 }
 

@@ -86,4 +86,20 @@ namespace paperback
 		//	{ Container.begin() } -> 
 		//};
 	}
+
+
+	//----------------------------------
+	// Helper Tools
+	//----------------------------------
+	namespace tuple_tools
+	{
+		template < typename T >
+		struct RemoveFirstType {};
+		
+		template < typename T, typename... ARGS >
+		struct RemoveFirstType< std::tuple< T, ARGS... > >
+		{
+			using value = std::tuple< ARGS... >;
+		};
+	}
 }

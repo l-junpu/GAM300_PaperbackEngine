@@ -7,7 +7,7 @@ struct PhysicsSystem : paperback::system::instance
 {
     void operator()( Transform& transform, Rigidbody& rigidbody )
     {
-        transform.m_Position += rigidbody.m_Velocity;
+        transform.m_Position += rigidbody.m_Velocity * m_Coordinator.DeltaTime();
 
         // X-Out-Of-Bounds
         if (transform.m_Position.m_X < 0.0f)

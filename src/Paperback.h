@@ -55,6 +55,7 @@ namespace paperback
 //----------------------------------
 #include "paperback_types.h"
 #include "paperback_settings.h"
+#include "paperback_clock.h"
 #include "paperback_event.h"
 #include "paperback_component.h"
 #include "paperback_bitset.h"
@@ -67,6 +68,7 @@ namespace paperback
 //----------------------------------
 // Inline Files
 //----------------------------------
+#include "Details/paperback_clock_inline.h"
 #include "Details/paperback_component_inline.h"
 #include "Details/paperback_system_inline.h"
 #include "Details/paperback_pool_inline.h"

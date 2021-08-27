@@ -26,9 +26,6 @@
     <Filter Include="Source Files\Tools\PCH">
       <UniqueIdentifier>{b309a8ab-8eca-483c-8e18-4af17efdda79}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Tools\Timer">
-      <UniqueIdentifier>{c4daa016-d94e-47a0-ad3a-a587302cbd95}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Paperback">
       <UniqueIdentifier>{f8045712-3c42-4218-87a4-3d735caa1310}</UniqueIdentifier>
     </Filter>
@@ -54,9 +51,6 @@
     </ClCompile>
     <ClCompile Include="..\..\src\PCH.cpp">
       <Filter>Source Files\Tools\PCH</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\Paperback_Clock.cpp">
-      <Filter>Source Files\Tools\Timer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -86,9 +80,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\ShipLogicSystem.h">
       <Filter>Source Files\Systems</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\Paperback_Clock.h">
-      <Filter>Source Files\Tools\Timer</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\BulletRenderingSystem.h">
       <Filter>Source Files\Systems</Filter>
@@ -163,6 +154,12 @@
       <Filter>Source Files\Paperback</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\paperback_types.h">
+      <Filter>Source Files\Paperback</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Details\paperback_clock_inline.h">
+      <Filter>Source Files\Paperback\Details</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\paperback_clock.h">
       <Filter>Source Files\Paperback</Filter>
     </ClInclude>
   </ItemGroup>

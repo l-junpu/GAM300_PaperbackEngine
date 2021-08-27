@@ -76,7 +76,7 @@ void timer(int value)
 {
     UNREFERENCED_PARAMETER(value);
     glutPostRedisplay();
-    glutTimerFunc(15, timer, 0);
+    glutTimerFunc( 15, timer, 0 );
 }
 
 void InitializeGame()
@@ -113,10 +113,10 @@ void InitializeGame()
                                                  
                                                      transform.m_Position.m_X = std::rand() % m_Engine.m_Width;
                                                      transform.m_Position.m_Y = std::rand() % m_Engine.m_Height;
-                                                 
-                                                     rigidbody.m_Velocity.m_X = (std::rand() / (float)RAND_MAX) - 0.5f;
-                                                     rigidbody.m_Velocity.m_Y = (std::rand() / (float)RAND_MAX) - 0.5f;
-                                                     rigidbody.m_Velocity.Normalize();
+                                                
+                                                     rigidbody.m_Velocity.m_X = ( std::rand() % 40 )/* - 0.5f*/;
+                                                     rigidbody.m_Velocity.m_Y = ( std::rand() % 40 )/* - 0.5f*/;
+                                                     //rigidbody.m_Velocity.Normalize();
                                                  
                                                      timer.m_Timer = (std::rand() / (float)RAND_MAX) * 8;
                                                  });
