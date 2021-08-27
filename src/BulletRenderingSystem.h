@@ -5,6 +5,11 @@
 
 struct BulletRenderingSystem : paperback::system::instance
 {
+    constexpr static auto typedef_v = paperback::system::type::update
+    {
+        .m_pName = "BulletRenderingSystem"
+    };
+
     using query = std::tuple<
         paperback::query::must<Bullet>
     >;

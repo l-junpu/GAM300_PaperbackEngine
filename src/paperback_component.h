@@ -17,8 +17,8 @@ namespace paperback::component
             static constexpr auto max_size_v = settings::virtual_page_size_v;
             static constexpr auto id_v       = id::DATA;
 
-            guid                  m_Guid { };
-            const char*           m_pName{ };
+            type::guid                         m_Guid { };
+            const char*                        m_pName{ };
         };
 
         struct tag
@@ -26,8 +26,8 @@ namespace paperback::component
             static constexpr auto max_size_v = 1;
             static constexpr auto id_v       = id::TAG;
 
-            guid                  m_Guid { };
-            const char*           m_pName{ };
+            type::guid                         m_Guid { };
+            const char*                        m_pName{ };
         };
 
         namespace details
@@ -52,6 +52,9 @@ namespace paperback::component
         constexpr bool is_valid_v = details::is_valid< xcore::types::decay_full_t<T_COMPONENT> >::value;
     }
 
+
+
+
     struct info
     {
         static constexpr auto invalid_id_v = 0xffff;
@@ -60,15 +63,18 @@ namespace paperback::component
         using Destructor    =  void( std::byte* ) noexcept;
         using Move          =  void( std::byte* Destination, std::byte* Source ) noexcept;
 
-        type::guid             m_Guid; // new - m_Value to access underneath
-        type::id               m_TypeID; // new
+        const type::guid       m_Guid;
+        const type::id         m_TypeID;
         mutable int            m_UID;
         mutable u32            m_Size;
         Constructor*           m_Constructor;
         Destructor*            m_Destructor;
         Move*                  m_Move;
-        const char*            m_pName; // new
+        const char*            m_pName;
     };
+
+    
+
 
 
     namespace details
@@ -80,12 +86,9 @@ namespace paperback::component
         static constexpr auto info_v = component::details::CreateInfo<T>();
     }
 
-    // component::info_v<T_COMPONENT>
     template< typename T_COMPONENT >
     constexpr auto& info_v = details::info_v< std::decay_t<T_COMPONENT> >;
 
-
-    // component::info_array_v
     template < typename T_TUPLE >
 	static constexpr auto info_array_v = []<typename... T_COMPONENTS>( std::tuple<T_COMPONENTS>* )
 	{
@@ -93,6 +96,9 @@ namespace paperback::component
 		else                                            return std::array{ &component::info_v<T_COMPONENTS>... };
 	}( xcore::types::null_tuple_v< T_TUPLE > );
 	
+
+
+
 
     union entity final
     {
@@ -129,17 +135,26 @@ namespace paperback::component
         constexpr bool operator == ( const entity& Entity ) const noexcept;
     };
     static_assert( sizeof(entity) == sizeof(uint64_t) );
-    
 
-    // paperback::component::mgr
+
+
+
+
+    namespace concepts
+    {
+        template < typename T_COMPONENT >
+        concept ValidComponent = component::type::is_valid_v<T_COMPONENT>;
+    }
+
 	struct manager
     {
     private:
-        inline static int m_ComponentUID = 0;
 
+        inline static int m_ComponentUID = 0;
+        
     public:
 
-        template< typename T_COMPONENT >
+        template< paperback::component::concepts::ValidComponent T_COMPONENT >
         void RegisterComponent( void ) noexcept;
 
         template< typename... T_COMPONENTS >

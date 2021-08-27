@@ -105,7 +105,7 @@ void InitializeGame()
 
     // Entity Creation
     {
-        for (int i = 0; i < 1000; ++i)
+        for (int i = 0; i < 4000; ++i)
         {
             m_Engine.m_Coordinator.CreateEntity( [&]( component::entity& Entity, Transform& transform, Rigidbody& rigidbody, Timer& timer )
                                                  {
@@ -114,9 +114,8 @@ void InitializeGame()
                                                      transform.m_Position.m_X = std::rand() % m_Engine.m_Width;
                                                      transform.m_Position.m_Y = std::rand() % m_Engine.m_Height;
                                                 
-                                                     rigidbody.m_Velocity.m_X = ( std::rand() % 40 )/* - 0.5f*/;
-                                                     rigidbody.m_Velocity.m_Y = ( std::rand() % 40 )/* - 0.5f*/;
-                                                     //rigidbody.m_Velocity.Normalize();
+                                                     rigidbody.m_Velocity.m_X = ( std::rand() % 40 );
+                                                     rigidbody.m_Velocity.m_Y = ( std::rand() % 40 );
                                                  
                                                      timer.m_Timer = (std::rand() / (float)RAND_MAX) * 8;
                                                  });

@@ -224,6 +224,20 @@ namespace paperback::coordinator
 	{
 		return m_EntityMgr.GetEntityInfo( GlobalIndex );
 	}
+
+	template< typename T_SYSTEM >
+	T_SYSTEM* instance::FindSystem( void ) noexcept
+	{
+		return m_SystemMgr.FindSystem<T_SYSTEM>();
+	}
+
+	template< typename T_SYSTEM >
+	T_SYSTEM& instance::GetSystem( void ) noexcept
+	{
+		auto p = m_SystemMgr.FindSystem<T_SYSTEM>();
+		assert( p );
+		return *p;
+	}
 	
 	void instance::FreeEntitiesInArchetype( archetype::instance* Archetype ) noexcept
 	{
@@ -320,12 +334,12 @@ namespace paperback::coordinator
 		return m_Clock.DeltaTime();
 	}
 
-    void instance::TimeScale( const float s ) noexcept
+    void instance::SetTimeScale( const float s ) noexcept
 	{
 		m_Clock.TimeScale( s );
 	}
 
-	float instance::TimeScale() const noexcept
+	float instance::GetTimeScale() const noexcept
 	{
 		return m_Clock.TimeScale();
 	}

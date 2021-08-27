@@ -78,13 +78,6 @@ namespace paperback
 
 		template < typename... T_ARGS >
 		concept MixedArgs					= !( std::is_reference_v<T_ARGS> && ... );
-
-
-		//template < typename T_CONTAINER >
-		//concept STL_Iteratable = requires( T_CONTAINER Container )
-		//{
-		//	{ Container.begin() } -> 
-		//};
 	}
 
 

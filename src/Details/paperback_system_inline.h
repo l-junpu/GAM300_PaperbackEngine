@@ -2,6 +2,27 @@
 
 namespace paperback::system
 {
+	namespace details
+    {
+        template< typename T_SYSTEM >
+        consteval system::type::info CreateInfo( void ) noexcept
+        {
+            return system::type::info
+            {
+                .m_Guid        = T_SYSTEM::typedef_v.m_Guid.isValid()
+                                 ? T_SYSTEM::typedef_v.m_Guid
+                                 : type::guid{ __FUNCSIG__ }
+            ,   .m_TypeID      = T_SYSTEM::typedef_v.id_v
+			,	.m_CallRun     = [](system::instance& pSystem, coordinator::instance& Coordinator)
+							     {
+								     static_cast<system::details::completed<T_SYSTEM>&>( pSystem ).Run( Coordinator );
+							     }
+			,	.m_pName		   = T_SYSTEM::typedef_v.m_pName
+            };
+        }
+	}
+
+
 	instance::instance( coordinator::instance& Coordinator ) noexcept : 
 		m_Coordinator{ Coordinator }
 	{ }
@@ -42,26 +63,27 @@ namespace paperback::system
 	}
 
 	template < typename T_SYSTEM >
-	constexpr T_SYSTEM& manager::RegisterSystem( coordinator::instance& Coordinator_ ) noexcept
+	constexpr T_SYSTEM& manager::RegisterSystem( coordinator::instance& Coordinator ) noexcept
 	{
-		m_Systems.push_back
-		(
-			info
-			{
-				.m_System = std::make_unique< system::details::completed<T_SYSTEM> >( Coordinator_ ),
-				.m_CallRun = []( system::instance& pSystem, coordinator::instance& Coordinator )
-				{
-					static_cast<system::details::completed<T_SYSTEM>&>(pSystem).Run( Coordinator );
-				}
-			}
-		);
-		return *( static_cast<T_SYSTEM*>( m_Systems.back().m_System.get()) );
+		m_Systems.push_back({ &system::info_v<T_SYSTEM>, std::make_unique< system::details::completed<T_SYSTEM> >(Coordinator) });
+		auto* pSystem = m_Systems.back().second.get();
+		m_SystemMap.emplace( std::make_pair( system::info_v<T_SYSTEM>.m_Guid, pSystem ) );
+
+		return *( static_cast<T_SYSTEM*>( pSystem ) );
+	}
+
+	template < typename T_SYSTEM >
+	T_SYSTEM* manager::FindSystem( void ) noexcept
+	{
+		return m_SystemMap.find( system::info_v<T_SYSTEM>.m_Guid ) != m_SystemMap.end()
+			   ? m_SystemMap.find( system::info_v<T_SYSTEM>.m_Guid )->second
+			   : nullptr;
 	}
 
 	void manager::Run( coordinator::instance& Coordinator ) noexcept
 	{
 		m_SystemClock.Tick();
-		for ( const auto& System : m_Systems )
-			System.m_CallRun( *System.m_System, Coordinator );
+		for ( const auto& [ Info, System ] : m_Systems )
+			Info->m_CallRun( *System, Coordinator );
 	}
 }

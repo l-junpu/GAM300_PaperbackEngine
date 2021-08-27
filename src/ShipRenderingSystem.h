@@ -2,6 +2,11 @@
 
 struct ShipRenderingSystem : paperback::system::instance
 {
+    constexpr static auto typedef_v = paperback::system::type::update
+    {
+        .m_pName = "ShipRenderingSystem"
+    };
+
     using query = std::tuple<
         paperback::query::none_of<Bullet>
     >;

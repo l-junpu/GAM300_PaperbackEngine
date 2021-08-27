@@ -47,7 +47,7 @@ namespace paperback::component
                                         < component::info_v< T_COMPONENT_B >.m_Guid;
         };
 
-        template< concepts::TupleSpecialization T_TUPLE >
+        template< paperback::concepts::TupleSpecialization T_TUPLE >
         using sort_tuple_t = xcore::types::tuple_sort_t< details::component_comparator, T_TUPLE >;
 
 
@@ -67,7 +67,7 @@ namespace paperback::component
         };
     }
 
-    template< concepts::TupleSpecialization T_TUPLE >
+    template< paperback::concepts::TupleSpecialization T_TUPLE >
     static constexpr auto sorted_info_array_v = []<typename...T>( std::tuple<T...>* ) constexpr
     {
         if constexpr ( sizeof...(T) == 0 ) return std::span<const component::info*>{};
@@ -76,7 +76,7 @@ namespace paperback::component
 
 	
     // Manager
-    template< typename T_COMPONENT >
+    template< paperback::component::concepts::ValidComponent T_COMPONENT >
     void manager::RegisterComponent( void ) noexcept
     {
         if (component::info_v<T_COMPONENT>.m_UID == component::info::invalid_id_v)

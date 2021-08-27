@@ -7,6 +7,11 @@
 
 struct ShipLogicSystem : paperback::system::instance
 {
+    constexpr static auto typedef_v = paperback::system::type::update
+    {
+        .m_pName = "ShipLogicSystem"
+    };
+
     using query = std::tuple<
         paperback::query::none_of<Bullet>
     >;

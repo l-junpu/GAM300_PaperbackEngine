@@ -6,6 +6,11 @@
 
 struct BulletLogicSystem : paperback::system::instance
 {
+    constexpr static auto typedef_v = paperback::system::type::update
+    {
+        .m_pName = "BulletLogicSystem"
+    };
+
     void operator()( paperback::component::entity& Entity, Transform& transform, Timer& timer, Bullet& bullet ) const noexcept
     {
         if (Entity.IsZombie()) return;
