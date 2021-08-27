@@ -44,7 +44,7 @@ namespace paperback::coordinator
 
 		template < concepts::TupleSpecialization T_TUPLE_ADD
 				 , concepts::TupleSpecialization T_TUPLE_REMOVE = std::tuple<>
-				 , concepts::Callable T_FUNCTION                = empty_lambda >
+				 , concepts::Callable			 T_FUNCTION     = empty_lambda >
 		component::entity AddOrRemoveComponents( component::entity Entity
 											   , T_FUNCTION&& Function ) noexcept;
 		

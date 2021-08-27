@@ -208,4 +208,24 @@ namespace paperback::vm
 		assert( false );
 		return -1;
 	}
+
+	int instance::GetComponentIndexFromGUID( const component::type::guid Guid ) const noexcept
+	{
+		for ( int i = 0, max = static_cast<int>(m_ComponentInfo.size()); i < max; ++i )
+		{
+			if ( m_ComponentInfo[i]->m_Guid.m_Value == Guid.m_Value )
+				return i;
+		}
+		return -1;
+	}
+
+	int instance::GetComponentIndexFromGUIDInSequence( const component::type::guid Guid, const int Sequence ) const noexcept
+	{
+		for ( int i = Sequence, max = static_cast<int>(m_ComponentInfo.size()); i < max; ++i )
+		{
+			if ( m_ComponentInfo[i]->m_Guid.m_Value == Guid.m_Value )
+				return i;
+		}
+		return -1;
+	}
 }

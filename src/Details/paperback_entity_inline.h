@@ -94,6 +94,56 @@ namespace paperback
             return m_ComponentPool[ Details.m_Key ].GetComponent<T_COMPONENT>( Details.m_PoolIndex );
         }
 
+   //     template < concepts::ReferenceArgs... T_COMPONENTS >
+   //     constexpr auto instance::GetComponentArray( vm::instance& Pool, u32 PoolIndex, std::tuple<T_COMPONENTS...>* ) const noexcept
+   //     {
+   //         using TupleComponents = std::tuple< T_COMPONENTS... >;
+   //         using SortedTuple = component::details::sort_tuple_t< TupleComponents >;
+
+   //         std::array<std::byte*, sizeof...(T_COMPONENTS)> ComponentArray;
+
+   //         [&]<typename... SORTED_COMPONENTS>( std::tuple<SORTED_COMPONENTS...>* ) constexpr noexcept
+   //         {
+   //             (( ComponentArray[ xcore::types::tuple_t2i_v< SORTED_COMPONENTS, TupleComponents > ]
+   //                  = [&]<typename T_COMPONENT>( std::tuple<T_COMPONENT>* ) constexpr noexcept
+   //                    {
+   //                        auto ComponentIndex = Pool.GetComponentIndexFromGUIDInSequence( component::info_v< SORTED_COMPONENTS >.m_Guid, 0 );
+   //                        return Pool.m_ComponentPool[ ComponentIndex ][ component::info_v< T_COMPONENT >.m_Size * PoolIndex ];
+   //                  
+   //                    }( xcore::types::make_null_tuple_v< SORTED_COMPONENTS > )),
+   //              ... );
+
+   //         }( xcore::types::null_tuple_v< SortedTuple > );
+
+   //         return ComponentArray;
+   //     }
+
+   //     template < concepts::MixedArgs... T_COMPONENTS >
+   //     constexpr auto instance::GetComponentArray( vm::instance& Pool, u32 PoolIndex, std::tuple<T_COMPONENTS...>* ) const noexcept
+   //     {
+   //         using TupleComponents = std::tuple< T_COMPONENTS... >;
+   //         using SortedTuple = component::details::sort_tuple_t< TupleComponents >;
+
+   //         std::array<std::byte*, sizeof...(T_COMPONENTS)> ComponentArray;
+
+   //         [&]<typename... SORTED_COMPONENTS>( std::tuple<SORTED_COMPONENTS...>* ) constexpr noexcept
+			//{
+			//	(( ComponentArray[ xcore::types::tuple_t2i_v< SORTED_COMPONENTS, TupleComponents > ]
+   //                 = [&]<typename T_COMPONENT>( std::tuple<T_COMPONENT>* ) constexpr noexcept
+			//	      {
+			//	          int ComponentIndex = Pool.GetComponentIndexFromGUIDInSequence( component::info_v< SORTED_COMPONENTS >.m_Guid, 0 );
+
+			//	          if constexpr ( std::is_pointer_v<T_COMPONENT> ) return ( ComponentIndex < 0 )
+   //                                                                              ? nullptr 
+   //                                                                              : Pool.m_ComponentPool[ ComponentIndex ][ sizeof(std::decay<T_COMPONENT>) * PoolIndex ];
+			//	          else									          return   Pool.m_ComponentPool[ ComponentIndex ][ sizeof(std::decay<T_COMPONENT>) * PoolIndex ];
+
+			//	      }( xcore::types::make_null_tuple_v< SORTED_COMPONENTS > )),
+   //             ... );
+
+			//}( xcore::types::null_tuple_v< SortedTuple > );
+   //     }
+
         template < typename T_FUNCTION >
         component::entity& instance::TransferExistingEntity( component::entity& Entity, T_FUNCTION&& Function ) noexcept
         {

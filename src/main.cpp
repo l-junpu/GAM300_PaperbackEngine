@@ -22,9 +22,9 @@ void InitializeGame();
 
 int main(int argc, char* argv[])
 {
-#if defined(DEBUG) | defined(_DEBUG)
-    _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
-    ShowWindow(GetConsoleWindow(), SW_SHOW);
+#if defined( PAPERBACK_DEBUG ) | defined( PAPERBACK_DEBUG )
+    _CrtSetDbgFlag( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF );
+    ShowWindow( GetConsoleWindow(), SW_SHOW );
 #else
     ShowWindow(GetConsoleWindow(), SW_HIDE);
 #endif
@@ -107,21 +107,19 @@ void InitializeGame()
     {
         for (int i = 0; i < 1000; ++i)
         {
-            m_Engine.m_Coordinator.CreateEntity([&]( component::entity& Entity, Transform& transform, Rigidbody& rigidbody, Timer& timer )
-                {
-                    Entity.m_GlobalIndex = 0;
-                    //++Entity.m_Validation.m_Next;
-                    //Entity.m_Validation.m_bZombie = false;
-
-                    transform.m_Position.m_X = std::rand() % m_Engine.m_Width;
-                    transform.m_Position.m_Y = std::rand() % m_Engine.m_Height;
-
-                    rigidbody.m_Velocity.m_X = (std::rand() / (float)RAND_MAX) - 0.5f;
-                    rigidbody.m_Velocity.m_Y = (std::rand() / (float)RAND_MAX) - 0.5f;
-                    rigidbody.m_Velocity.Normalize();
-
-                    timer.m_Timer = (std::rand() / (float)RAND_MAX) * 8;
-                });
+            m_Engine.m_Coordinator.CreateEntity( [&]( component::entity& Entity, Transform& transform, Rigidbody& rigidbody, Timer& timer )
+                                                 {
+                                                     Entity.m_GlobalIndex = 0;
+                                                 
+                                                     transform.m_Position.m_X = std::rand() % m_Engine.m_Width;
+                                                     transform.m_Position.m_Y = std::rand() % m_Engine.m_Height;
+                                                 
+                                                     rigidbody.m_Velocity.m_X = (std::rand() / (float)RAND_MAX) - 0.5f;
+                                                     rigidbody.m_Velocity.m_Y = (std::rand() / (float)RAND_MAX) - 0.5f;
+                                                     rigidbody.m_Velocity.Normalize();
+                                                 
+                                                     timer.m_Timer = (std::rand() / (float)RAND_MAX) * 8;
+                                                 });
         }
     }
 }

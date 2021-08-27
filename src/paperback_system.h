@@ -8,10 +8,10 @@ namespace paperback::system
 
 		PPB_INLINE
 		instance( coordinator::instance& Coordinator ) noexcept;
-		//instance(const instance&) = delete;
+		instance( const instance& ) = delete;
 
 		PPB_INLINE
-		void Execute( void );
+		void Execute( coordinator::instance& Coordinator ) noexcept;
 
 		coordinator::instance& m_Coordinator;
 	};
@@ -24,7 +24,7 @@ namespace paperback::system
 			PPB_INLINE
 			completed( coordinator::instance& Coordinator ) noexcept;
 
-			PPB_INLINE
+			PPB_FORCEINLINE
 			void Run( coordinator::instance& Coordinator ) noexcept;
 		};
 	}
@@ -47,7 +47,13 @@ namespace paperback::system
 		template < typename T_SYSTEM >
 		constexpr T_SYSTEM& RegisterSystem( coordinator::instance& Coordinator_ ) noexcept;
 
+		// Find System ( Return * )
+		
+		// Get System  ( Return & )
+
 		PPB_INLINE
 		void Run( coordinator::instance& Coordinator ) noexcept;
+
+		// bool m_bPaused;
 	};
 }

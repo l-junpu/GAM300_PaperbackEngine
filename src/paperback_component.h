@@ -2,19 +2,72 @@
 
 namespace paperback::component
 {
+    namespace type
+    {
+        using guid = xcore::guid::unit<64, struct component_tag>;
+
+        enum class id : u8
+        {
+            DATA = 0
+        ,   TAG
+        };
+
+        struct data
+        {
+            static constexpr auto max_size_v = settings::virtual_page_size_v;
+            static constexpr auto id_v       = id::DATA;
+
+            guid                  m_Guid { };
+            const char*           m_pName{ };
+        };
+
+        struct tag
+        {
+            static constexpr auto max_size_v = 1;
+            static constexpr auto id_v       = id::TAG;
+
+            guid                  m_Guid { };
+            const char*           m_pName{ };
+        };
+
+        namespace details
+        {
+            template< typename T_COMPONENT >
+            struct is_valid
+            {
+                template< auto Class >         struct Check;
+                template< typename >           static std::false_type VerifyComponent( ... );
+                template< typename COMPONENT > static auto VerifyComponent( Check<&COMPONENT::typedef_v>* ) -> std::conditional_t
+                                               <
+                                                  ( std::is_same_v< const data, decltype( COMPONENT::typedef_v ) > && sizeof( T_COMPONENT ) <= data::max_size_v )
+                                               || ( std::is_same_v< const tag,  decltype( COMPONENT::typedef_v ) > && sizeof( T_COMPONENT ) <= tag::max_size_v  )
+                                               ,    std::true_type
+                                               ,    std::false_type
+                                               >;
+                constexpr static auto value = decltype( VerifyComponent<T_COMPONENT>(nullptr) )::value;
+            };
+        }
+
+        template< typename T_COMPONENT >
+        constexpr bool is_valid_v = details::is_valid< xcore::types::decay_full_t<T_COMPONENT> >::value;
+    }
+
     struct info
     {
-        constexpr static auto invalid_id_v = 0xffff;
+        static constexpr auto invalid_id_v = 0xffff;
 
         using Constructor   =  void( std::byte* ) noexcept;
         using Destructor    =  void( std::byte* ) noexcept;
         using Move          =  void( std::byte* Destination, std::byte* Source ) noexcept;
 
+        type::guid             m_Guid; // new - m_Value to access underneath
+        type::id               m_TypeID; // new
         mutable int            m_UID;
-        mutable uint32_t       m_Size;
+        mutable u32            m_Size;
         Constructor*           m_Constructor;
         Destructor*            m_Destructor;
         Move*                  m_Move;
+        const char*            m_pName; // new
     };
 
 
@@ -43,6 +96,11 @@ namespace paperback::component
 
     union entity final
     {
+        constexpr static auto typedef_v = paperback::component::type::data
+        {
+            .m_pName = "Entity"
+        };
+
         union Validation final
         {
             uint32_t        m_UID;

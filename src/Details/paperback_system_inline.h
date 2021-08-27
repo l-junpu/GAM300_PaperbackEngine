@@ -6,7 +6,7 @@ namespace paperback::system
 		m_Coordinator{ Coordinator }
 	{ }
 	
-	void instance::Execute( void )
+	void instance::Execute( coordinator::instance& Coordinator ) noexcept
 	{ }
 	
 	template < typename USER_SYSTEM >
@@ -20,7 +20,7 @@ namespace paperback::system
 		// If user defined their custom Execute
 		if constexpr ( &USER_SYSTEM::Execute != &instance::Execute )
 		{
-			USER_SYSTEM::Execute( );
+			USER_SYSTEM::Execute( Coordinator );
 		}
 		else
 		{

@@ -2,9 +2,11 @@
 
 struct BufferRefreshSystem : paperback::system::instance
 {
-    __inline
-    void Execute( void )
+    PPB_FORCEINLINE
+    void Execute( paperback::coordinator::instance& Coordinator )
     {
+        UNREFERENCED_PARAMETER( Coordinator );
+
         glutSwapBuffers();
         glClear(GL_COLOR_BUFFER_BIT);
     }

@@ -50,7 +50,7 @@ namespace paperback::coordinator
 	template< typename T_FUNCTION >
 	void instance::CreateEntities( T_FUNCTION&& Function, const u32 Count ) noexcept
 	{
-		
+		// To define
 	}
 
 	void instance::DeleteEntity( component::entity& Entity ) noexcept
@@ -134,9 +134,11 @@ namespace paperback::coordinator
 				{
 					[&]<typename... T_COMPONENTS>( std::tuple<T_COMPONENTS...>* ) constexpr noexcept
 					{
+						//auto ComponentArray = Archetype->GetComponentArray(Pool, i, xcore::types::null_tuple_v<func_traits::args_tuple>);
+
 						Function([&]<typename T_C>( std::tuple<T_C>* ) constexpr noexcept -> T_C
 						{
-							auto& pComponent = ComponentPtrs[xcore::types::tuple_t2i_v<T_C, typename func_traits::args_tuple>];
+							auto& pComponent = /*ComponentArray*/ComponentPtrs[xcore::types::tuple_t2i_v<T_C, typename func_traits::args_tuple>];
 
 							if constexpr (std::is_pointer_v<T_C>) if (pComponent == nullptr) return reinterpret_cast<T_C>(nullptr);
 

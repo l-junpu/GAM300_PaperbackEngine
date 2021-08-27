@@ -49,5 +49,11 @@ namespace paperback::vm
 
 		PPB_INLINE
 		int GetComponentIndex( const u32 UIDComponent ) const noexcept;
+
+		PPB_INLINE
+		int GetComponentIndexFromGUID( const component::type::guid Guid ) const noexcept;
+		
+		PPB_INLINE
+		int GetComponentIndexFromGUIDInSequence( const component::type::guid Guid, const int Sequence ) const noexcept;
 	};
 }

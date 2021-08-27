@@ -10,34 +10,41 @@ namespace paperback::component
         {
             return info
             {
-                .m_UID = info::invalid_id_v
-            ,   .m_Size = static_cast<uint32_t>( sizeof(T_COMPONENT) )
+                .m_Guid        = std::is_same_v< component::entity, T_COMPONENT >
+                                 ? type::guid{ nullptr }
+                                 : T_COMPONENT::typedef_v.m_Guid.m_Value
+                                     ? T_COMPONENT::typedef_v.m_Guid
+                                     : type::guid{ __FUNCSIG__ }
+            ,   .m_TypeID      = T_COMPONENT::typedef_v.id_v
+            ,   .m_UID         = info::invalid_id_v
+            ,   .m_Size        = static_cast<uint32_t>( sizeof(T_COMPONENT) )
             ,   .m_Constructor = std::is_trivially_constructible_v<T_COMPONENT>
-                    ? nullptr
-                    : []( std::byte* p ) noexcept
-                      {
-                          new(p) T_COMPONENT;
-                      }
-            ,   .m_Destructor = std::is_trivially_destructible_v<T_COMPONENT>
-                    ? nullptr
-                    : []( std::byte* p ) noexcept
-                      {
-                          std::destroy_at( reinterpret_cast<T_COMPONENT*>(p) );
-                      }
-            ,   .m_Move = std::is_trivially_move_assignable_v<T_COMPONENT>
-                    ? nullptr
-                    : [](std::byte* d, std::byte* s) noexcept
-                      {
-                          *reinterpret_cast<T_COMPONENT*>(d) = std::move( *reinterpret_cast<T_COMPONENT*>(s) );
-                      }
+                                 ? nullptr
+                                 : []( std::byte* p ) noexcept
+                                   {
+                                       new(p) T_COMPONENT;
+                                   }
+            ,   .m_Destructor  = std::is_trivially_destructible_v<T_COMPONENT>
+                                 ? nullptr
+                                 : []( std::byte* p ) noexcept
+                                   {
+                                       std::destroy_at( reinterpret_cast<T_COMPONENT*>(p) );
+                                   }
+            ,   .m_Move        = std::is_trivially_move_assignable_v<T_COMPONENT>
+                                 ? nullptr
+                                 : [](std::byte* d, std::byte* s) noexcept
+                                   {
+                                       *reinterpret_cast<T_COMPONENT*>(d) = std::move( *reinterpret_cast<T_COMPONENT*>(s) );
+                                   }
             };
         }
 
 
-        template< typename T_A, typename T_B >
+        template< typename T_COMPONENT_A, typename T_COMPONENT_B >
         struct component_comparator
         {
-            constexpr static bool value = component::info_v<T_A>.m_UID < component::info_v<T_B>.m_UID;
+            constexpr static bool value = component::info_v< T_COMPONENT_A >.m_Guid
+                                        < component::info_v< T_COMPONENT_B >.m_Guid;
         };
 
         template< concepts::TupleSpecialization T_TUPLE >

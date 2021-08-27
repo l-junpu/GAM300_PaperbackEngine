@@ -39,6 +39,12 @@ namespace paperback
             template < typename T_COMPONENT >
             T_COMPONENT& GetComponent( const PoolDetails Details ) const noexcept;
 
+            //template < concepts::ReferenceArgs... T_COMPONENTS >
+            //constexpr auto GetComponentArray( vm::instance& Pool, u32 PoolIndex, std::tuple<T_COMPONENTS...>* ) const noexcept;
+
+            //template < concepts::MixedArgs... T_COMPONENTS >
+            //constexpr auto GetComponentArray( vm::instance& Pool, u32 PoolIndex, std::tuple<T_COMPONENTS...>* ) const noexcept;
+
             template < typename T_FUNCTION >
             component::entity& TransferExistingEntity( component::entity& Entity, T_FUNCTION&& Function ) noexcept;
 
