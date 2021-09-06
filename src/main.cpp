@@ -1,20 +1,14 @@
 #include "Paperback.h"
 
-// Game Components
-#include "Timer.h"
-#include "Bullet.h"
-#include "Rigidbody.h"
-#include "Transform.h"
+//-----------------------------------
+//       Component & Systems
+//-----------------------------------
+#include "Components/component_includes.h"
+#include "Systems/system_includes.h"
 
-// Game Systems
-#include "PhysicsSystem.h"
-#include "ShipLogicSystem.h"
-#include "BulletLogicSystem.h"
-#include "ShipRenderingSystem.h"
-#include "BulletRenderingSystem.h"
-#include "BufferRefresh.h"
-
-
+//-----------------------------------
+//      Forward Declarations
+//-----------------------------------
 using namespace paperback;
 void timer(int value);
 void InitializeGame();
@@ -29,35 +23,35 @@ int main(int argc, char* argv[])
     ShowWindow(GetConsoleWindow(), SW_HIDE);
 #endif
 
+    // Initialization
     xcore::Init( "Starting xCore");
-
-
     InitializeGame();
 
-
-    glutInitWindowSize(m_Engine.m_Width, m_Engine.m_Height);
-    glutInit(&argc, argv);
-    glutInitDisplayMode(GLUT_DOUBLE);
-    glutCreateWindow("Paperback Engine");
+    // Game Loop - To be replaced with purely PPB.Update()
+    // when rendering systems is up
+    glutInitWindowSize( m_Engine.m_Width, m_Engine.m_Height );
+    glutInit( &argc, argv );
+    glutInitDisplayMode( GLUT_DOUBLE );
+    glutCreateWindow( "Paperback Engine" );
     glutDisplayFunc([]
-        {
-            m_Engine.m_Coordinator.Update();
-        });
+    {
+        PPB.Update();
+    });
     glutReshapeFunc([](int w, int h)
-        {
-            m_Engine.m_Width = w;
-            m_Engine.m_Height = h;
-            glViewport(0, 0, w, h);
-            glMatrixMode(GL_PROJECTION);
-            glLoadIdentity();
-            glOrtho(0, w, 0, h, -1, 1);
-            glScalef(1, -1, 1);
-            glTranslatef(0, -h, 0);
-        });
-    glutTimerFunc(0, timer, 0);
+    {
+        m_Engine.m_Width = w;
+        m_Engine.m_Height = h;
+        glViewport( 0, 0, w, h );
+        glMatrixMode( GL_PROJECTION );
+        glLoadIdentity();
+        glOrtho( 0, w, 0, h, -1, 1 );
+        glScalef( 1, -1, 1 );
+        glTranslatef( 0, -h, 0 );
+    });
+    glutTimerFunc( 0, timer, 0 );
     glutMainLoop();
 
-
+    // Termination
     xcore::Kill();
 }
 
@@ -72,9 +66,9 @@ int main(int argc, char* argv[])
 
 
 
-void timer(int value)
+void timer( int value )
 {
-    UNREFERENCED_PARAMETER(value);
+    UNREFERENCED_PARAMETER( value );
     glutPostRedisplay();
     glutTimerFunc( 15, timer, 0 );
 }
@@ -83,7 +77,7 @@ void InitializeGame()
 {
     // Register Components
     {
-        m_Engine.m_Coordinator.RegisterComponents<
+       PPB.RegisterComponents<
             Bullet,
             Rigidbody,
             Transform,
@@ -93,7 +87,7 @@ void InitializeGame()
 
     // Register Systems
     {
-        m_Engine.m_Coordinator.RegisterSystems<
+        PPB.RegisterSystems<
             PhysicsSystem,
             ShipLogicSystem,
             BulletLogicSystem,
@@ -107,18 +101,18 @@ void InitializeGame()
     {
         for (int i = 0; i < 4000; ++i)
         {
-            m_Engine.m_Coordinator.CreateEntity( [&]( component::entity& Entity, Transform& transform, Rigidbody& rigidbody, Timer& timer )
-                                                 {
-                                                     Entity.m_GlobalIndex = 0;
-                                                 
-                                                     transform.m_Position.m_X = std::rand() % m_Engine.m_Width;
-                                                     transform.m_Position.m_Y = std::rand() % m_Engine.m_Height;
-                                                
-                                                     rigidbody.m_Velocity.m_X = ( std::rand() % 40 );
-                                                     rigidbody.m_Velocity.m_Y = ( std::rand() % 40 );
-                                                 
-                                                     timer.m_Timer = (std::rand() / (float)RAND_MAX) * 8;
-                                                 });
+            PPB.CreateEntity( [&]( component::entity& Entity, Transform& transform, Rigidbody& rigidbody, Timer& timer )
+                              {
+                                  Entity.m_GlobalIndex = 0;
+                              
+                                  transform.m_Position.m_X = std::rand() % m_Engine.m_Width;
+                                  transform.m_Position.m_Y = std::rand() % m_Engine.m_Height;
+                              
+                                  rigidbody.m_Velocity.m_X = ( std::rand() % 40 );
+                                  rigidbody.m_Velocity.m_Y = ( std::rand() % 40 );
+                              
+                                  timer.m_Timer = (std::rand() / (float)RAND_MAX) * 8;
+                              });
         }
     }
 }

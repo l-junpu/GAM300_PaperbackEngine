@@ -1,10 +1,5 @@
 #pragma once
 
-#include "Timer.h"
-#include "Transform.h"
-#include "Bullet.h"
-#include "Rigidbody.h"
-
 struct ShipLogicSystem : paperback::system::instance
 {
     constexpr static auto typedef_v = paperback::system::type::update

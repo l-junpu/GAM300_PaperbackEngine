@@ -8,10 +8,14 @@ struct BufferRefreshSystem : paperback::system::instance
     };
 
     PPB_FORCEINLINE
-    void Execute( paperback::coordinator::instance& Coordinator )
+    void OnSystemCreated( void ) noexcept
     {
-        UNREFERENCED_PARAMETER( Coordinator );
+        
+    }
 
+    PPB_FORCEINLINE
+    void Update( void )
+    {
         glutSwapBuffers();
         glClear(GL_COLOR_BUFFER_BIT);
     }

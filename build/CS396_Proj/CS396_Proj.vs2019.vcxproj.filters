@@ -26,14 +26,20 @@
     <Filter Include="Source Files\Tools\PCH">
       <UniqueIdentifier>{b309a8ab-8eca-483c-8e18-4af17efdda79}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Paperback">
-      <UniqueIdentifier>{f8045712-3c42-4218-87a4-3d735caa1310}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Paperback\Details">
-      <UniqueIdentifier>{bd7d0b12-3815-4480-a4af-a0a2744777de}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Components">
       <UniqueIdentifier>{7baf085b-41e6-457d-8a42-658bb89aeda7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Components\Details">
+      <UniqueIdentifier>{a671e15a-864a-41d7-9409-01bb37c198ae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Paperback Engine">
+      <UniqueIdentifier>{f8045712-3c42-4218-87a4-3d735caa1310}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Paperback Engine\Details">
+      <UniqueIdentifier>{bd7d0b12-3815-4480-a4af-a0a2744777de}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Systems\Details">
+      <UniqueIdentifier>{0b244a7e-2f56-491d-9f4a-8eb3bc90d788}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -69,98 +75,110 @@
     <ClInclude Include="..\..\src\PCH.h">
       <Filter>Source Files\Tools\PCH</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\PhysicsSystem.h">
-      <Filter>Source Files\Systems</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\Paperback.h">
-      <Filter>Source Files\Paperback</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\BulletLogicSystem.h">
-      <Filter>Source Files\Systems</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\ShipLogicSystem.h">
-      <Filter>Source Files\Systems</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\BulletRenderingSystem.h">
-      <Filter>Source Files\Systems</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\ShipRenderingSystem.h">
-      <Filter>Source Files\Systems</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\BufferRefresh.h">
-      <Filter>Source Files\Systems</Filter>
+      <Filter>Source Files\Paperback Engine</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\paperback_bitset.h">
-      <Filter>Source Files\Paperback</Filter>
+      <Filter>Source Files\Paperback Engine</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\paperback_component.h">
-      <Filter>Source Files\Paperback</Filter>
+      <Filter>Source Files\Paperback Engine</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\paperback_coordinator.h">
-      <Filter>Source Files\Paperback</Filter>
+      <Filter>Source Files\Paperback Engine</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\paperback_entity.h">
-      <Filter>Source Files\Paperback</Filter>
+      <Filter>Source Files\Paperback Engine</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\paperback_event.h">
-      <Filter>Source Files\Paperback</Filter>
+      <Filter>Source Files\Paperback Engine</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\paperback_pool.h">
-      <Filter>Source Files\Paperback</Filter>
+      <Filter>Source Files\Paperback Engine</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\paperback_query.h">
-      <Filter>Source Files\Paperback</Filter>
+      <Filter>Source Files\Paperback Engine</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\paperback_system.h">
-      <Filter>Source Files\Paperback</Filter>
+      <Filter>Source Files\Paperback Engine</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\Details\paperback_bitset_inline.h">
-      <Filter>Source Files\Paperback\Details</Filter>
+      <Filter>Source Files\Paperback Engine\Details</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\Details\paperback_component_inline.h">
-      <Filter>Source Files\Paperback\Details</Filter>
+      <Filter>Source Files\Paperback Engine\Details</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\Details\paperback_coordinator_inline.h">
-      <Filter>Source Files\Paperback\Details</Filter>
+      <Filter>Source Files\Paperback Engine\Details</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\Details\paperback_entity_inline.h">
-      <Filter>Source Files\Paperback\Details</Filter>
+      <Filter>Source Files\Paperback Engine\Details</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\Details\paperback_event_inline.h">
-      <Filter>Source Files\Paperback\Details</Filter>
+      <Filter>Source Files\Paperback Engine\Details</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\Details\paperback_pool_inline.h">
-      <Filter>Source Files\Paperback\Details</Filter>
+      <Filter>Source Files\Paperback Engine\Details</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\Details\paperback_query_inline.h">
-      <Filter>Source Files\Paperback\Details</Filter>
+      <Filter>Source Files\Paperback Engine\Details</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\Details\paperback_system_inline.h">
-      <Filter>Source Files\Paperback\Details</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\Bullet.h">
-      <Filter>Source Files\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\Rigidbody.h">
-      <Filter>Source Files\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\Timer.h">
-      <Filter>Source Files\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\Transform.h">
-      <Filter>Source Files\Components</Filter>
+      <Filter>Source Files\Paperback Engine\Details</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\paperback_settings.h">
-      <Filter>Source Files\Paperback</Filter>
+      <Filter>Source Files\Paperback Engine</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\paperback_types.h">
-      <Filter>Source Files\Paperback</Filter>
+      <Filter>Source Files\Paperback Engine</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\Details\paperback_clock_inline.h">
-      <Filter>Source Files\Paperback\Details</Filter>
+      <Filter>Source Files\Paperback Engine\Details</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\paperback_clock.h">
-      <Filter>Source Files\Paperback</Filter>
+      <Filter>Source Files\Paperback Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Components\component_includes.h">
+      <Filter>Source Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Components\Bullet.h">
+      <Filter>Source Files\Components\Details</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Components\Rigidbody.h">
+      <Filter>Source Files\Components\Details</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Components\Timer.h">
+      <Filter>Source Files\Components\Details</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Components\Transform.h">
+      <Filter>Source Files\Components\Details</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Systems\system_includes.h">
+      <Filter>Source Files\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Systems\ShipRenderingSystem.h">
+      <Filter>Source Files\Systems\Details</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Systems\BufferRefresh.h">
+      <Filter>Source Files\Systems\Details</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Systems\BulletLogicSystem.h">
+      <Filter>Source Files\Systems\Details</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Systems\BulletRenderingSystem.h">
+      <Filter>Source Files\Systems\Details</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Systems\PhysicsSystem.h">
+      <Filter>Source Files\Systems\Details</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Systems\ShipLogicSystem.h">
+      <Filter>Source Files\Systems\Details</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Details\paperback_logger_inline.h">
+      <Filter>Source Files\Paperback Engine\Details</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\paperback_logger.h">
+      <Filter>Source Files\Paperback Engine</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

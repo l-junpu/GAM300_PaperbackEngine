@@ -1,5 +1,9 @@
 #pragma once
 
+#define DEBUG_BREAK() __debugbreak()
+#define PPB_BIND(fn) [this](auto&&... args) -> decltype(auto) { return this->fn(std::forward<decltype(args)>(args)...); }
+#define PPB_BASIC_BIND(fn) std::bind(&fn, this, std::placeholders::_1)
+
 namespace paperback
 {
 	//----------------------------------
@@ -31,6 +35,28 @@ namespace paperback
 
 	using f32 = float;
 	using f64 = double;
+
+	// Unique ptr
+	template <typename T>
+	using Scope = std::shared_ptr<T>;
+
+	template <typename T, typename ...Args>
+	constexpr Scope<T> CreateScope(Args&& ...args) { return std::make_unique<T>(std::forward<Args>(args)...); }
+
+	// Shared ptr
+	template <typename T>
+	using Ref = std::shared_ptr<T>;
+
+	template <typename T, typename ...Args>
+	constexpr Ref<T> CreateRef(Args&& ...args) { return std::make_shared<T>(std::forward<Args>(args)...); }
+
+	// No-Return fn
+	template <typename... Args>
+	using Action = std::function< void( Args... ) >;
+
+	// Return fn
+	template <typename Result, typename... Args>
+	using Func = std::function< Result( Args... ) >;
 
 
 	//----------------------------------

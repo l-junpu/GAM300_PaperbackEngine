@@ -23,6 +23,7 @@
 #include <array>
 #include <queue>
 #include <functional>
+#include <typeindex>
 
 //----------------------------------
 // Dependencies
@@ -53,8 +54,10 @@ namespace paperback
 //----------------------------------
 // Files
 //----------------------------------
+#include "paperback_logger.h"
 #include "paperback_types.h"
 #include "paperback_settings.h"
+#include "paperback_event.h"
 #include "paperback_clock.h"
 #include "paperback_event.h"
 #include "paperback_component.h"
@@ -68,6 +71,8 @@ namespace paperback
 //----------------------------------
 // Inline Files
 //----------------------------------
+#include "Details/paperback_logger_inline.h"
+#include "Details/paperback_event_inline.h"
 #include "Details/paperback_clock_inline.h"
 #include "Details/paperback_component_inline.h"
 #include "Details/paperback_system_inline.h"

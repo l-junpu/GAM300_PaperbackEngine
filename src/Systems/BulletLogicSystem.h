@@ -1,9 +1,5 @@
 #pragma once
 
-#include "Bullet.h"
-#include "Timer.h"
-#include "Transform.h"
-
 struct BulletLogicSystem : paperback::system::instance
 {
     constexpr static auto typedef_v = paperback::system::type::update

@@ -61,7 +61,6 @@ namespace paperback::coordinator
 		Info.m_pArchetype->DestroyEntity( Entity );
 	}
 
-	//TEMPORARY TEST ONLY (Try to remove)
 	void instance::RemoveEntity( const uint32_t SwappedGlobalIndex, const component::entity Entity ) noexcept
 	{
 		m_EntityMgr.RemoveEntity( SwappedGlobalIndex, Entity );
@@ -111,7 +110,7 @@ namespace paperback::coordinator
 
 		for (const auto& Archetype : ArchetypeList)
 		{
-			// Temporarily using only pool Index[0]
+			// Temporarily using only pool Index[0] - To replace with linked list implementation
 			auto& Pool = Archetype->m_ComponentPool[0];
 
 			auto ComponentPtrs = [&]<typename... T_COMPONENTS>( std::tuple<T_COMPONENTS...>* ) constexpr noexcept
@@ -134,11 +133,10 @@ namespace paperback::coordinator
 				{
 					[&]< typename... T_COMPONENTS >( std::tuple<T_COMPONENTS...>* ) constexpr noexcept
 					{
-						//auto ComponentArray = Archetype->GetComponentArray(Pool, i, xcore::types::null_tuple_v< component_type_args::value >);
 
 						Function( [&]<typename T_C>( std::tuple<T_C>* ) constexpr noexcept -> T_C
 								  {
-									  auto& pComponent = /*ComponentArray*/ComponentPtrs[xcore::types::tuple_t2i_v< T_C, typename func_traits::args_tuple >];
+									  auto& pComponent = ComponentPtrs[xcore::types::tuple_t2i_v< T_C, typename func_traits::args_tuple >];
 								  
 									  if constexpr (std::is_pointer_v<T_C>) if (pComponent == nullptr) return reinterpret_cast<T_C>(nullptr);
 								  
@@ -164,7 +162,7 @@ namespace paperback::coordinator
 
 		for ( const auto& Archetype : ArchetypeList )
 		{
-			// Temporarily using only pool Index[0]
+			// Temporarily using only pool Index[0] - To replace with linked list implementation
 			auto& Pool = Archetype->m_ComponentPool[0];
 
 			auto ComponentPtrs = [&]< typename... T_COMPONENTS >( std::tuple<T_COMPONENTS...>* ) constexpr noexcept
@@ -244,7 +242,7 @@ namespace paperback::coordinator
 		m_EntityMgr.FreeEntitiesInArchetype( Archetype );
 	}
 
-	// NEW PRIVATE FN
+	/*
 	template < concepts::Callable T_FUNCTION >
 	component::entity instance::AddOrRemoveComponents ( const component::entity Entity, 
 													    std::span<const component::info* const> Add,
@@ -328,6 +326,7 @@ namespace paperback::coordinator
 			else                                                      return Archetype.TransferExistingEntity( Entity, Function );
 		}
 	}
+	*/
 
 	float instance::DeltaTime() const noexcept
 	{

@@ -52,15 +52,16 @@ namespace paperback::coordinator
 		PPB_INLINE
 		void DeleteEntity( component::entity& Entity ) noexcept;
 
-		PPB_INLINE // TEMPORARY TEST ONLY (Try to remove)
+		PPB_INLINE
 		void RemoveEntity( const uint32_t SwappedGlobalIndex, const component::entity Entity ) noexcept;
 
+		/*
 		template < concepts::TupleSpecialization T_TUPLE_ADD
 				 , concepts::TupleSpecialization T_TUPLE_REMOVE = std::tuple<>
 				 , concepts::Callable			 T_FUNCTION     = empty_lambda >
 		component::entity AddOrRemoveComponents( component::entity Entity
 											   , T_FUNCTION&& Function ) noexcept;
-		
+		*/
 
 
 		//-----------------------------------
@@ -108,7 +109,7 @@ namespace paperback::coordinator
 		template< typename T_SYSTEM >
 		T_SYSTEM& GetSystem( void ) noexcept;
 
-		PPB_INLINE // TO REPLACE IN ARCHETYPE
+		PPB_INLINE // To Place Inside Archetype Directly
 		void FreeEntitiesInArchetype( archetype::instance* Archetype ) noexcept;
 
 		PPB_FORCEINLINE
@@ -126,12 +127,13 @@ namespace paperback::coordinator
 		//    Archetype / Entity Methods
 		//-----------------------------------
 		
-		// NEW PRIVATE FN
+		/*
 		template < concepts::Callable T_FUNCTION >
 		component::entity AddOrRemoveComponents( const component::entity Entity
 											   , std::span<const component::info* const> Add
 											   , std::span<const component::info* const> Remove
 											   , T_FUNCTION&& Function = empty_lambda{} ) noexcept;
+		*/
 	};
 }
 
@@ -140,4 +142,6 @@ static struct engine
 	paperback::coordinator::instance& m_Coordinator = paperback::coordinator::instance::GetInstance();
 	int m_Width = 1024;
 	int m_Height = 800;
-}m_Engine;
+} m_Engine;
+
+#define PPB m_Engine.m_Coordinator

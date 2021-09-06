@@ -1,8 +1,5 @@
 #pragma once
 
-#include "Transform.h"
-#include "Rigidbody.h"
-
 struct BulletRenderingSystem : paperback::system::instance
 {
     constexpr static auto typedef_v = paperback::system::type::update
